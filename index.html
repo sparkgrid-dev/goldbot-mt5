@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gold Bot · MT5 Gold Scalper</title>
+<meta name="description" content="Gold Bot: a desktop dashboard and automated M1 gold scalper for MetaTrader 5. Demo-only by default.">
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05070d; --panel:rgba(12,16,26,.92); --line:rgba(255,255,255,.09); --ink:#e8edf6; --muted:#8f9ab0;
+  --cy:#22d3ee; --au:#f2c14e; --au2:#b8860b; --good:#34d399; --bad:#fb7185;
+  --mono:"JetBrains Mono",Consolas,monospace; --ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font:16px/1.6 var(--ui);
+  background:radial-gradient(1000px 650px at 10% -10%,rgba(34,211,238,.10),transparent 60%),
+             radial-gradient(900px 600px at 95% 0%,rgba(242,193,78,.09),transparent 60%),var(--bg);
+  background-attachment:fixed}
+.floor{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.floor::before{content:"";position:absolute;left:-50%;right:-50%;bottom:-35%;height:80%;opacity:.35;
+  background-image:linear-gradient(rgba(34,211,238,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.14) 1px,transparent 1px);
+  background-size:64px 64px;transform:perspective(520px) rotateX(72deg);transform-origin:50% 100%;
+  -webkit-mask-image:linear-gradient(to top,#000,transparent 75%);mask-image:linear-gradient(to top,#000,transparent 75%);animation:floor 6s linear infinite}
+@keyframes floor{to{background-position:0 64px}}
+a{color:var(--cy)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+nav{display:flex;align-items:center;gap:12px;padding:18px 0}
+.logo{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font:800 16px var(--ui);color:#3a2a00;background:linear-gradient(135deg,#f6d77a,var(--au2));box-shadow:0 4px 18px rgba(242,193,78,.3)}
+nav b{font:800 18px var(--disp,Orbitron),sans-serif;font-family:Orbitron,var(--ui);letter-spacing:.05em}
+nav .sp{flex:1}
+nav a{color:var(--muted);text-decoration:none;font-size:14px;margin-left:18px}
+nav a:hover{color:var(--ink)}
+
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:50px 0 40px}
+.tag{display:inline-block;font:600 12px var(--mono);letter-spacing:.08em;color:var(--cy);border:1px solid rgba(34,211,238,.35);border-radius:99px;padding:4px 12px}
+h1{font-family:Orbitron,var(--ui);font-weight:800;font-size:clamp(34px,5vw,54px);line-height:1.1;margin:16px 0 14px;letter-spacing:.01em;
+  background:linear-gradient(90deg,#fff,#d7f6ff 50%,var(--au));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:#b8c2d4;font-size:18px;max-width:34em}
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:10px;font:700 16px var(--ui);text-decoration:none;border-radius:12px;padding:14px 22px;transition:transform .12s,filter .2s}
+.btn:hover{filter:brightness(1.08)}.btn:active{transform:scale(.98)}
+.btn.dl{background:linear-gradient(135deg,#f6d77a,var(--au2));color:#1b1404;box-shadow:0 8px 26px rgba(212,160,23,.3)}
+.btn.ghost{color:var(--ink);border:1px solid var(--line);background:rgba(255,255,255,.04)}
+.meta{font:12.5px var(--mono);color:var(--muted);margin-top:12px}
+
+/* dashboard mock (illustration, not real data) */
+.mock{position:relative;border-radius:18px;padding:14px;background:var(--panel);border:1px solid rgba(34,211,238,.25);box-shadow:0 30px 70px rgba(0,0,0,.55);transform:perspective(900px) rotateY(-8deg) rotateX(4deg);animation:float 7s ease-in-out infinite}
+@keyframes float{50%{translate:0 -6px}}
+.mock .bar{display:flex;gap:6px;margin-bottom:10px}.mock .bar i{width:9px;height:9px;border-radius:50%;background:#2a3142}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:rgba(255,255,255,.025)}
+.tile span{display:block;font-size:10px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+.tile b{font:700 16px var(--mono)}
+.pos{color:var(--good)}.neg{color:var(--bad)}
+.spark{height:70px;margin-top:10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02)}
+.mock small{display:block;text-align:right;color:#5d6678;font-size:10.5px;margin-top:8px}
+
+section{padding:46px 0}
+h2{font-family:Orbitron,var(--ui);font-size:24px;letter-spacing:.03em;margin:0 0 8px}
+.sub{color:var(--muted);margin:0 0 24px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{position:relative;border-radius:16px;padding:20px;background:var(--panel);border:1px solid var(--line)}
+.card::before{content:"";position:absolute;top:8px;left:8px;width:12px;height:12px;border-top:2px solid var(--cy);border-left:2px solid var(--cy);border-radius:3px 0 0 0;opacity:.6}
+.card h3{margin:0 0 6px;font-size:16px}
+.card p{margin:0;color:#aab4c6;font-size:14.5px}
+.steps{counter-reset:s;display:grid;gap:12px}
+.step{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;border-radius:14px;padding:16px;background:var(--panel);border:1px solid var(--line)}
+.step::before{counter-increment:s;content:counter(s);width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font:700 18px var(--mono);color:#1b1404;background:linear-gradient(135deg,#f6d77a,var(--au2))}
+.step h3{margin:2px 0 4px;font-size:16px}.step p{margin:0;color:#aab4c6;font-size:14.5px}
+code,kbd{font-family:var(--mono);font-size:.9em;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.warn{border-radius:16px;padding:22px;background:rgba(251,113,133,.07);border:1px solid rgba(251,113,133,.35)}
+.warn h2{color:#ffd1d8}
+.warn ul{margin:10px 0 0;padding-left:20px;color:#e9c9cf}
+details{border-radius:12px;padding:14px 16px;background:var(--panel);border:1px solid var(--line);margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}
+details p{color:#aab4c6;margin:10px 0 0;font-size:14.5px}
+.hash{word-break:break-all}
+footer{padding:30px 0 50px;color:#6b7488;font-size:13px;border-top:1px solid var(--line);margin-top:20px}
+@media (max-width:860px){.hero{grid-template-columns:1fr}.mock{transform:none}.cards{grid-template-columns:1fr}nav a{display:none}}
+@media (prefers-reduced-motion:reduce){.floor::before,.mock{animation:none}}
+</style>
+</head>
+<body>
+<div class="floor"></div>
+<div class="wrap">
+  <nav>
+    <div class="logo">Au</div><b>Gold Bot</b><span class="sp"></span>
+    <a href="#features">Features</a><a href="#install">Install</a><a href="#risk">Risk</a><a href="#faq">FAQ</a>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <span class="tag">METATRADER 5 · XAUUSD · WINDOWS</span>
+      <h1>An automated gold scalper with a live dashboard</h1>
+      <p class="lead">Gold Bot connects to your MetaTrader 5 terminal, reads every 1-minute gold candle and manages trade baskets with broker-side stops, a daily loss limit and a clean control panel in your browser.</p>
+      <div class="cta">
+        <a class="btn dl" href="https://github.com/Maribeth22/goldbot-mt5/releases/latest/download/GoldBot.exe">⬇ Download for Windows</a>
+        <a class="btn ghost" href="#install">How to install</a>
+      </div>
+      <div class="meta">GoldBot.exe · version 1.0 · 24.8 MB · Windows 10/11 (64-bit)</div>
+    </div>
+    <div class="mock" aria-hidden="true">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="tiles">
+        <div class="tile"><span>Account</span><b>$10,000</b></div>
+        <div class="tile"><span>Gold</span><b>3588.66</b></div>
+        <div class="tile"><span>Trend</span><b class="pos">▲ Up</b></div>
+        <div class="tile"><span>Losses</span><b class="neg">−$12.40</b></div>
+        <div class="tile"><span>Profit</span><b class="pos">+$31.20</b></div>
+        <div class="tile"><span>Open</span><b>5</b></div>
+      </div>
+      <svg class="spark" viewBox="0 0 300 70" preserveAspectRatio="none"><polyline fill="none" stroke="#22d3ee" stroke-width="2" points="0,50 20,46 40,52 60,38 80,42 100,30 120,34 140,22 160,28 180,18 200,26 220,16 240,22 260,12 280,18 300,10"/></svg>
+      <small>Illustration only, not real results</small>
+    </div>
+  </header>
+
+  <section id="features">
+    <h2>What it does</h2>
+    <p class="sub">Everything runs on your own computer. Nothing is sent to us.</p>
+    <div class="cards">
+      <div class="card"><h3>M1 candle entries</h3><p>Decides at a set second of each 1-minute candle using candle colour, M1/M5 trends and a wick filter.</p></div>
+      <div class="card"><h3>Basket trading</h3><p>Opens a batch of trades together, each with its own target at the broker, and an optional recovery and counter-batch mode.</p></div>
+      <div class="card"><h3>Broker-side protection</h3><p>Stops and targets are stored at your broker, so trades stay protected even if the app or your PC is closed.</p></div>
+      <div class="card"><h3>Daily loss limit</h3><p>Counts losses only. When reached it closes everything and stops trading until the next day.</p></div>
+      <div class="card"><h3>Live dashboard</h3><p>Results, open and closed trades with entry and exit times, an activity log with history, and all settings in one page.</p></div>
+      <div class="card"><h3>Demo-first</h3><p>Trades demo accounts only out of the box. Live trading stays locked unless you deliberately unlock it.</p></div>
+    </div>
+  </section>
+
+  <section id="install">
+    <h2>Install in 4 steps</h2>
+    <p class="sub">You need a MetaTrader 5 terminal from your broker. A demo account is strongly recommended.</p>
+    <div class="steps">
+      <div class="step"><div><h3>Install MetaTrader 5 and log in</h3><p>Download MT5 from your broker, log in to a <b>demo</b> account and add the gold symbol (XAUUSD / GOLD) to Market Watch.</p></div></div>
+      <div class="step"><div><h3>Turn on Algo Trading</h3><p>In MT5 click the <b>Algo Trading</b> button in the toolbar so it turns green. Keep MT5 open while the bot runs.</p></div></div>
+      <div class="step"><div><h3>Download and run GoldBot.exe</h3><p>Save <code>GoldBot.exe</code> anywhere (e.g. your Desktop) and double-click it. If Windows SmartScreen appears, click <b>More info → Run anyway</b> (the app is not code-signed). Keep its window open.</p></div></div>
+      <div class="step"><div><h3>Open the dashboard and press Start</h3><p>Your browser opens <code>http://127.0.0.1:8790</code>. Check the settings, then press <b>Start trading</b>. Trading is always off after the app starts.</p></div></div>
+    </div>
+  </section>
+
+  <section id="risk">
+    <div class="warn">
+      <h2>Please read: risk warning</h2>
+      <ul>
+        <li><b>This is experimental software.</b> In our own 90-day tests on real gold ticks, the strategy <b>lost money overall</b>. Short winning streaks are common and misleading.</li>
+        <li>Recovery and basket modes can turn a small loss into a very large one within minutes.</li>
+        <li>Use a <b>demo account</b>. Never trade money you cannot afford to lose.</li>
+        <li>This is not financial advice, and there is no guarantee of profit. You are responsible for every trade it places on your account.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2>FAQ</h2>
+    <details><summary>Windows says "Windows protected your PC". Is it safe?</summary><p>The app isn't code-signed, so SmartScreen warns about any new download. Check the file's fingerprint below matches before running it, then choose More info → Run anyway.</p></details>
+    <details><summary>Where are my settings stored?</summary><p>In <code>%LOCALAPPDATA%\GoldBot</code> (config, activity history and trade log). Delete that folder to reset everything.</p></details>
+    <details><summary>Can I trade a live account?</summary><p>Not by default: the bot refuses live accounts. Unlocking it means editing <code>allow_live</code> in the config file yourself. Please test on demo first.</p></details>
+    <details><summary>Does closing the app close my trades?</summary><p>No. Open trades stay in MetaTrader 5 with their stops and targets at the broker. Restarting the app never closes trades.</p></details>
+    <details><summary>How do I uninstall?</summary><p>Delete <code>GoldBot.exe</code> and the <code>%LOCALAPPDATA%\GoldBot</code> folder. Nothing else is installed.</p></details>
+    <details><summary>File fingerprint (SHA-256)</summary><p class="hash"><code>DBFDB8AE560FDEA619D0D425BFD53EDB0A79A83EB84DF5FA50BF88507B4BB9BB</code><br>Check it in PowerShell with <code>Get-FileHash GoldBot.exe</code>.</p></details>
+  </section>
+
+  <footer>Gold Bot is an independent tool and is not affiliated with MetaQuotes or any broker. MetaTrader is a trademark of its owner. Trading leveraged products carries a high risk of loss. Not financial advice.</footer>
+</div>
+</body>
+</html>
