@@ -438,11 +438,11 @@ footer b{color:#cdd6e4}
 .totop.show{opacity:1;transform:none;pointer-events:auto}
 .totop:hover{background:rgba(242,193,78,.16)}
 .totop:focus-visible{outline:2px solid #22d3ee;outline-offset:3px}
-html{scrollbar-color:rgba(242,193,78,.6) rgba(255,255,255,.05)}
-::-webkit-scrollbar{width:16px;height:16px}
-::-webkit-scrollbar-thumb{background:rgba(242,193,78,.55);border-radius:10px;border:3px solid transparent;background-clip:padding-box;min-height:48px}
-::-webkit-scrollbar-thumb:hover{background:rgba(242,193,78,.85);background-clip:padding-box}
-::-webkit-scrollbar-track{background:rgba(255,255,255,.05)}
+@supports not selector(::-webkit-scrollbar){html{scrollbar-color:#22d3ee rgba(255,255,255,.04)}}
+::-webkit-scrollbar{width:14px;height:14px}
+::-webkit-scrollbar-track{background:linear-gradient(90deg,rgba(255,255,255,.02),rgba(34,211,238,.05),rgba(255,255,255,.02));border-left:1px solid rgba(34,211,238,.10)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#22d3ee 0%,#5eead4 45%,#f2c14e 100%);border-radius:10px;border:3px solid transparent;background-clip:padding-box;min-height:56px;box-shadow:inset 0 0 6px rgba(255,255,255,.35)}
+::-webkit-scrollbar-thumb:hover{border-width:2px;filter:brightness(1.15)}
 @media (max-width:600px){.totop{right:14px;bottom:14px;width:44px;height:44px}}
 </style>
 <button class="totop" id="toTop" type="button" aria-label="Back to top" title="Back to top">&#8593;</button>
