@@ -110,8 +110,11 @@ h1{font:800 clamp(36px,5.2vw,64px)/1.04 var(--disp);letter-spacing:.005em;margin
 #mc .bidline{stroke:#ef5350;stroke-dasharray:3 3;stroke-width:1}
 #mc .bidbox{fill:#ef5350}
 #mc .bidtxt{font:700 9.5px var(--mono);fill:#fff}
-#mc .main{fill:none;stroke:#fff;stroke-width:1.8;stroke-linejoin:round;filter:url(#zap);opacity:.95}
-#mc .mainglow{fill:none;stroke:rgba(74,222,128,.45);stroke-width:6;filter:url(#greenglow)}
+#mc .main{fill:none;stroke:#fff;stroke-width:1.9;stroke-linejoin:miter;stroke-miterlimit:3;filter:url(#zap)}
+#mc .mainglow{fill:none;stroke:rgba(74,222,128,.6);stroke-width:6;filter:url(#greenglow)}
+#mc .fan{fill:none;stroke:rgba(74,222,128,.17);stroke-width:.8;stroke-linejoin:miter}
+#mc .fan.hot{stroke:rgba(134,239,172,.36);stroke-width:1}
+#mtFan{filter:drop-shadow(0 0 2px rgba(74,222,128,.45))}
 #mc .spark{fill:#fff}
 /* ---------- stats strip ---------- */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:10px 0 70px}
@@ -220,6 +223,8 @@ footer b{color:#cdd6e4}
               </defs>
               <g id="mtGrid"></g>
               <g id="mtAxis"></g>
+                <clipPath id="plotclip"><rect x="8" y="4" width="532" height="208"/></clipPath>
+              <g id="mtFan" clip-path="url(#plotclip)"></g>
               <g id="mcPaths"></g>
               <path id="trendpath" class="mainglow" d=""/><path id="mainline" class="main" d=""/>
               <g id="mtBid"></g>
@@ -365,9 +370,24 @@ footer b{color:#cdd6e4}
       el("rect", {x: x - cw / 2, y: top, width: cw, height: h, class: cls}, grp);
       nodes.push(grp);
     });
-    // lightning line through the closes
+    // lightning line: jagged zigzag through each candle's high and low, ending on its close
     const pts = candles.map((k, i) => [L + i * step + step / 2, y(k.c)]);
-    const md = pts.map((q, i) => (i ? "L" : "M") + q[0].toFixed(1) + "," + q[1].toFixed(1)).join("");
+    // the line runs just above the candles (in the gaps), so the candles stay readable underneath
+    const zig = [];
+    candles.forEach((k, i) => {
+      const x = L + i * step + step / 2, top = y(k.hi) - 5;
+      zig.push([x - step * .5, Math.max(3, top - 2 - rnd() * 4)], [x, Math.max(6, top + 2 + rnd() * 2)]);
+    });
+    const md = zig.map((q, i) => (i ? "L" : "M") + q[0].toFixed(1) + "," + q[1].toFixed(1)).join("");
+    // green fan: faint jagged price paths branching from the start, like the old simulation look
+    const fan = document.getElementById("mtFan"), fanPaths = [];
+    const drift = (candles[N - 1].c - candles[0].o) / N;
+    for (let f = 0; f < 38; f++) {
+      let v = candles[0].o, d = "M" + pts[0][0].toFixed(1) + "," + y(v).toFixed(1);
+      const vol = .9 + rnd() * 1.4, bias = drift + gauss() * .32;
+      for (let i = 1; i < N; i++) { v += bias + gauss() * vol; d += "L" + (L + i * step + step / 2).toFixed(1) + "," + y(v).toFixed(1); }
+      fanPaths.push(el("path", {d, class: f % 7 === 0 ? "fan hot" : "fan"}, fan));
+    }
     const ml = document.getElementById("mainline"), mg = document.getElementById("trendpath");
     ml.setAttribute("d", md); mg.setAttribute("d", md);
     // bid line + price tag on the right axis, like MT5
@@ -377,9 +397,9 @@ footer b{color:#cdd6e4}
     el("text", {x: R + 6, y: y(last) + 3.4, class: "bidtxt"}, bid).textContent = last.toFixed(2);
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     // live loop: candles appear left to right, the lightning line follows, then strikes at peaks
-    const mlen = ml.getTotalLength();
+    const mlen = ml.getTotalLength(), flens = fanPaths.map(p => p.getTotalLength());
     const bolts = el("g", {filter: "url(#zap)"}, svg);
-    const peaks = pts.map((q, i) => ({x: q[0], y: q[1], i})).filter(q => q.i > 2 && q.i < N - 1 && q.y < pts[q.i - 1][1] && q.y < pts[q.i + 1][1]);
+    const peaks = zig.map((q, i) => ({x: q[0], y: q[1], i})).filter(q => q.i > 4 && q.i < zig.length - 1 && q.y < zig[q.i - 1][1] && q.y < zig[q.i + 1][1] && q.y < 150);
     const strike = () => {
       const q = peaks[Math.floor(Math.random() * peaks.length)]; if (!q) return;
       let x = q.x, yy = q.y; const zz = [`${x},${yy}`];
@@ -398,6 +418,7 @@ footer b{color:#cdd6e4}
       nodes.forEach((n, i) => { n.style.opacity = i < shown ? 1 : 0; });
       bid.style.opacity = k >= 1 ? 1 : 0;
       [ml, mg].forEach(e => { e.style.strokeDasharray = mlen; e.style.strokeDashoffset = mlen * (1 - k); });
+      fanPaths.forEach((e, i) => { e.style.strokeDasharray = flens[i]; e.style.strokeDashoffset = flens[i] * (1 - k); });
       if (tm > DRAW && now - start > nextStrike) { strike(); nextStrike = now - start + 900 + Math.random() * 1400; }
     };
     setInterval(() => frame(performance.now()), 33);
