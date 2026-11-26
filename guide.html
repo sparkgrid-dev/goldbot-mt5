@@ -76,7 +76,7 @@ footer{max-width:1100px;margin:0 auto;padding:24px 20px 40px;color:#6b7488;font-
 
 <main>
 <h1>User Guide</h1>
-<p class="lead">Everything you need to install Gold Bot, understand every setting, and run it safely. For version 1.2.</p>
+<p class="lead">Everything you need to install Gold Bot, understand every setting, and run it safely. For version 1.3.</p>
 
 <div class="box warn"><b class="t">Read this first</b>Gold Bot is experimental. In our own 90-day tests on real gold ticks the strategy <b>lost money overall</b>. Use a <b>demo account</b>. Nothing here is financial advice.</div>
 
@@ -96,7 +96,7 @@ footer{max-width:1100px;margin:0 auto;padding:24px 20px 40px;color:#6b7488;font-
   <li>A black window opens (keep it open: closing it stops the bot) and your browser opens the dashboard at <code>http://127.0.0.1:8790</code>.</li>
   <li><b>Check the settings</b> (section 5), then press <b>Start trading</b>. Trading is <b>always off</b> when the app starts.</li>
 </ol>
-<div class="box tip"><b class="t">Sized to your account automatically</b>On the very first start, the bot reads your account balance, leverage and the gold price and sets the lot size, mode, stop, daily loss limit and recovery to match: small accounts get small, simple settings. The Activity log shows what it chose, for example <i>"Settings sized for a $100.00 account (first start): 0.01 lots, simple mode, stop $3.00, daily loss limit $10, recovery off."</i></div>
+<div class="box tip"><b class="t">Sized to your account automatically</b>On the very first start, the bot reads your account balance and leverage and applies the matching <b>account-size preset</b> (section 5). The Activity log shows what it chose, for example <i>"Settings sized for a $100 account (first start): 1 x 0.01 lots, target $0.50, stop $20 per batch, daily loss limit $20, recovery off, counter off."</i> It's only a starting point: change anything you like.</div>
 <div class="box tip"><b class="t">Tip</b>Only one copy of the bot can run at a time. If you double-click it again, the second window just says it's already running.</div>
 
 <h2 id="tour">3. Dashboard tour</h2>
@@ -125,12 +125,19 @@ footer{max-width:1100px;margin:0 auto;padding:24px 20px 40px;color:#6b7488;font-
 <h2 id="settings">5. Settings explained</h2>
 <p>Money amounts are in your account currency. "Gold move" means dollars of gold price (at 0.01 lots, a $1 gold move ≈ $1 profit or loss per trade; at 0.10 lots ≈ $10).</p>
 
-<h3>Quick setup and risk warnings</h3>
+<h3>Account-size presets and risk warnings</h3>
+<div class="box tip"><b class="t">A ready-made starting point, not a lock</b>Presets give you a tested setup to try for your account size. After applying one you can still change <b>every</b> setting by hand and experiment with your own ideas.</div>
 <table>
-  <tr><td>Quick setup</td><td>The <b>Size for my account</b> button at the top of Settings fits lot size, mode, stop, targets, daily loss limit and recovery to your current balance, leverage and the gold price. It shows the values and asks first. Your entry rules stay as they are; you can change anything afterwards. Use it after a deposit, a withdrawal, or switching accounts.</td></tr>
+  <tr><td>Account size preset</td><td>At the top of Settings, pick an amount: <b>$100</b> (the minimum), <b>$200, $300, $400, $500, $750, $1,000</b> and up, <b>My balance</b>, or <b>Other amount…</b> ($100 or more). A preview shows trades × lots, target and stop per batch, daily limit, recovery, counter batches and the gold move to the stop. Press <b>Apply</b> (it asks first). Your entry rules stay as they are.</td></tr>
   <tr><td>Risk warnings</td><td>A red box appears when settings risk too much for the balance: daily loss limit above 25% of the account, stop above 20% per batch (10% per trade in simple mode), one batch needing more than half the balance as margin, or unlimited recovery batches.</td></tr>
 </table>
-<p>How Quick setup sizes things, roughly: about 0.05 lots per $10,000 (minimum 0.01, capped at 0.10); one batch uses at most ~30% of the balance as margin; daily loss limit 10% of the balance; stop 3% per trade (simple mode) or 5% per batch (basket mode); under $1,000 simple mode; under $2,000 no recovery or counter batches.</p>
+<p><b>How the presets are calculated:</b> every size is scaled from the developer's tested <b>$10,000 setup</b>: 5 trades × 0.02 lots, each trade targeting $0.50 of gold, a stop of 20% of the balance per batch, a daily loss limit of 20%, recovery every $3 of gold, and counter batches targeting $4 of gold.</p>
+<ul>
+  <li>Exposure, stop and daily limit grow in proportion to the amount ($100 → $20 stop and daily limit; $1,000 → $200; $10,000 → $2,000).</li>
+  <li>The smallest trade is 0.01 lots, so smaller accounts use <b>fewer trades per batch</b> (1 trade up to about $1,000, 2 at $2,000, 5 from about $5,000).</li>
+  <li>Your account's <b>leverage</b> decides how many recovery and counter batches the margin can safely carry (one batch uses at most ~30% of the balance, everything together ~60%). At 1:100 a $100 account gets no recovery; at 1:1000 it can.</li>
+</ul>
+<div class="box warn"><b class="t">Note</b>The $10,000 template uses a large 20% stop and daily limit. That is the developer's own experimental choice, not a recommendation. Many traders risk far less, for example 1–5% per trade. Lower the stop and daily limit if you prefer.</div>
 
 <h3>Size and targets</h3>
 <table>
@@ -193,7 +200,7 @@ footer{max-width:1100px;margin:0 auto;padding:24px 20px 40px;color:#6b7488;font-
 <p>All the settings above are on the dashboard, so you can set the bot up for any account size. Small accounts need much smaller numbers, because gold moves fast and the default settings are sized for larger accounts.</p>
 <div class="box warn"><b class="t">Why small accounts need care</b>
 At 0.01 lots, a $10 move in gold is about <b>$10 per trade</b>. Gold often moves $10–20 in an hour. Each 0.01-lot gold trade also ties up roughly <b>$30–40 of margin</b> (at 1:100 leverage), so a $100 account can only hold <b>2–3 trades</b> at once. Batches of 5 or recovery batches can trigger a broker <b>stop-out</b> that closes everything at a large loss. Small accounts have been wiped this way.</div>
-<p>The easiest way: open a $100 <b>demo</b> account and let the bot size itself (first start) or press <b>Size for my account</b>. It picks values like these. A careful starting point for about $100 (an example, not advice):</p>
+<p>The easiest way: open a $100 <b>demo</b> account and choose the <b>$100 preset</b> (or let the bot size itself on first start). If you'd like to be more careful than the preset, a gentler setup for about $100 looks like this (an example, not advice):</p>
 <table>
   <tr><th>Setting</th><th>Suggested</th><th>Why</th></tr>
   <tr><td>Lot size per trade</td><td>0.01</td><td>The smallest size: about $1 per $1 gold move.</td></tr>
