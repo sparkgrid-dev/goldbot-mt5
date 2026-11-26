@@ -69,6 +69,24 @@ h1{font:800 clamp(36px,5.2vw,64px)/1.04 var(--disp);letter-spacing:.005em;margin
 .btn.dl:hover{box-shadow:0 14px 44px rgba(212,160,23,.55)}
 .btn.gh{color:var(--ink);border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05)}
 .btn.gh:hover{background:rgba(255,255,255,.09)}
+.offer{margin-top:24px;padding:16px 18px;border-radius:18px;max-width:600px}
+.offer-main{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.offer-tag{font:700 11px var(--mono);letter-spacing:.12em;color:#1b1404;background:linear-gradient(135deg,#f8dc84,#d4a017);padding:4px 9px;border-radius:7px}
+.price-row{display:flex;align-items:baseline;gap:10px;margin-top:8px}
+.price-now{font:800 40px/1 var(--disp);color:#fff}
+.price-was{font:600 19px var(--mono);color:var(--muted);text-decoration-color:rgba(251,113,133,.9);text-decoration-thickness:2px}
+.price-save{font:700 12px var(--mono);color:#34d399;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);padding:3px 7px;border-radius:7px}
+.offer-timer{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.offer-ends{font:500 11.5px var(--mono);color:var(--muted);letter-spacing:.04em}
+.countdown{display:grid;grid-template-columns:repeat(4,52px);gap:6px}
+.countdown div{text-align:center;padding:6px 2px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(34,211,238,.25)}
+.countdown b{display:block;font:700 19px/1.1 var(--mono);color:#c9f4ff}
+.countdown small{font:500 9.5px var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.offer .cta{margin:0}
+.offer-soon{font:600 13px var(--mono);color:#c9f4ff;margin:10px 0 0}
+.offer-fine{font:500 11px var(--mono);color:var(--muted);margin:12px 0 0;letter-spacing:.02em}
+.offer.ended .countdown,.offer.ended .price-was,.offer.ended .price-save{display:none}
+@media (max-width:640px){.offer-main{align-items:flex-start}.offer-timer{align-items:flex-start}.price-now{font-size:36px}}
 .btn.tip{color:#ffd9e2;border:1px solid rgba(251,113,133,.45);background:rgba(251,113,133,.08)}
 .btn.tip:hover{background:rgba(251,113,133,.16);box-shadow:0 0 22px rgba(251,113,133,.25)}
 .tipline{margin-top:6px}.tipline a{color:#ffb3c4}
@@ -195,15 +213,32 @@ footer b{color:#cdd6e4}
 <div class="wrap">
   <header class="hero">
     <div>
-      <div class="pills"><span class="pill">METATRADER 5 · XAUUSD · WINDOWS</span><a class="pill au" href="https://github.com/sparkgrid-dev/goldbot-mt5/releases/tag/v2.0">NEW · v2.0: daily profit lock</a></div>
+      <div class="pills"><span class="pill">METATRADER 5 · XAUUSD · WINDOWS</span><span class="pill au">NEW · v2.0: daily profit lock</span></div>
       <h1>Gold scalping, on autopilot.</h1>
-      <p class="lead">Gold Bot reads every 1-minute gold candle in MetaTrader 5, opens and manages trade baskets with broker-side stops and a daily loss limit, and shows everything on a live dashboard, on your PC or your phone.</p>
-      <div class="cta">
-        <a class="btn dl" href="https://github.com/sparkgrid-dev/goldbot-mt5/releases/latest/download/GoldBot.exe">⬇ Download v2.0 for Windows</a>
-        <a class="btn gh" href="guide.html">Read the guide →</a>
-        <a class="btn tip" href="https://paypal.me/MaribethAguirre22" target="_blank" rel="noopener">♥ Tip the developer</a>
+      <p class="lead">Your always-on gold co-pilot for MetaTrader 5. It reads every 1-minute candle, decides in seconds, and guards every basket with broker-side stops, a daily loss limit and a profit lock, live on your PC and phone.</p>
+      <div class="offer glass" id="offer" data-ends="2026-12-31T23:59:59+04:00">
+        <div class="offer-main">
+          <div class="offer-price">
+            <span class="offer-tag" id="offerTag">LAUNCH PRICE</span>
+            <div class="price-row"><span class="price-now" id="priceNow">$9.99</span><s class="price-was" id="priceWas">$29.99</s><span class="price-save" id="priceSave">-67%</span></div>
+          </div>
+          <div class="offer-timer">
+            <span class="offer-ends" id="offerEnds">ends 31 Dec · 23:59 UAE</span>
+            <div class="countdown" id="countdown" aria-live="off">
+              <div><b id="cdD">00</b><small>days</small></div>
+              <div><b id="cdH">00</b><small>hrs</small></div>
+              <div><b id="cdM">00</b><small>min</small></div>
+              <div><b id="cdS">00</b><small>sec</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="cta">
+          <a class="btn dl" id="buyBtn" href="#buy">⚡ Unlock Gold Bot · $9.99</a>
+          <a class="btn gh" href="#how">See how it works →</a>
+        </div>
+        <p class="offer-soon" id="offerSoon" hidden>Checkout opens soon. Please check back shortly.</p>
+        <p class="offer-fine" id="offerNote">One-time payment · updates included · then $29.99 · demo-only by default · not financial advice</p>
       </div>
-      <div class="meta">GoldBot.exe · v2.0 · 24.9 MB · Windows 10/11 · free · demo-only by default</div>
     </div>
 
     <div class="stage" id="stage" aria-hidden="true">
@@ -304,7 +339,7 @@ footer b{color:#cdd6e4}
   <section id="faq">
     <div class="eyebrow">FAQ</div>
     <h2>Questions</h2>
-    <details class="glass"><summary>Is it free?</summary><p>Yes. Gold Bot is free to download and use. If it helps you and you'd like to support further work, you can leave an optional tip through <a href="https://paypal.me/MaribethAguirre22" target="_blank" rel="noopener">PayPal</a>. A tip is a thank-you, not a purchase: it doesn't unlock anything or change how the bot trades.</p></details>
+    <details class="glass"><summary>How much does it cost?</summary><p>A one-time payment: <b>$9.99</b> during the launch sale (until 31 December 2026, 23:59 UAE time), then $29.99. There's no subscription, and future updates are included. Gold Bot trades demo accounts only by default, and in our own tests the strategy lost money overall, so try it on a demo account first.</p></details>
     <details class="glass"><summary>Windows says "Windows protected your PC". Is it safe?</summary><p>The app isn't code-signed, so SmartScreen warns about any new download. Check the fingerprint below matches, then choose More info → Run anyway.</p></details>
     <details class="glass"><summary>Can I use it with $100?</summary><p>Yes. Pick the $100 setup in Settings (the minimum) and check its numbers in the preview before applying it. Try it on a $100 demo account first.</p></details>
     <details class="glass"><summary>Can I trade a live account?</summary><p>Not by default: the bot refuses live accounts. You can unlock it yourself at your own risk; the steps and warnings are in the <a href="guide.html#live">User guide, section 8</a>.</p></details>
@@ -317,7 +352,7 @@ footer b{color:#cdd6e4}
 <footer><div class="wrap in">
   <img src="sparkgrid.png" alt="sparkgrid-dev logo">
   <div><b>Gold Bot</b> · built by <a href="https://github.com/sparkgrid-dev">sparkgrid-dev</a><br>
-  An independent tool, not affiliated with MetaQuotes or any broker. MetaTrader is a trademark of its owner. Trading leveraged products carries a high risk of loss. Not financial advice.<div class="tipline">Free to use. Like it? <a href="https://paypal.me/MaribethAguirre22" target="_blank" rel="noopener">♥ Leave an optional tip</a></div></div>
+  An independent tool, not affiliated with MetaQuotes or any broker. MetaTrader is a trademark of its owner. Trading leveraged products carries a high risk of loss. Not financial advice.</div>
 </div></footer>
 
 <script>
@@ -432,6 +467,33 @@ footer b{color:#cdd6e4}
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), {threshold: .12});
   document.querySelectorAll(".rv").forEach(el => io.observe(el));
   setTimeout(() => document.querySelectorAll(".rv").forEach(el => el.classList.add("in")), 2500);   // never leave content hidden
+})();
+</script>
+<script>
+/* launch sale: one real deadline for every visitor; after it the regular price shows automatically */
+(function () {
+  var box = document.getElementById("offer"); if (!box) return;
+  var ends = new Date(box.getAttribute("data-ends")).getTime();
+  var pad = function (n) { return (n < 10 ? "0" : "") + n; };
+  var set = function (id, v) { document.getElementById(id).textContent = v; };
+  function tick() {
+    var left = ends - Date.now();
+    if (left <= 0) {
+      box.classList.add("ended");
+      set("offerTag", "PRICE"); set("offerEnds", "");
+      set("priceNow", "$29.99"); set("offerNote", "One-time payment · updates included · demo-only by default · not financial advice");
+      set("buyBtn", "⚡ Unlock Gold Bot · $29.99");
+      clearInterval(timer); return;
+    }
+    var s = Math.floor(left / 1000);
+    set("cdD", pad(Math.floor(s / 86400))); set("cdH", pad(Math.floor(s % 86400 / 3600)));
+    set("cdM", pad(Math.floor(s % 3600 / 60))); set("cdS", pad(s % 60));
+  }
+  var timer = setInterval(tick, 1000); tick();
+  var buy = document.getElementById("buyBtn");
+  buy.addEventListener("click", function (e) {            // no store link yet: say so instead of a dead click
+    if (buy.getAttribute("href") === "#buy") { e.preventDefault(); document.getElementById("offerSoon").hidden = false; }
+  });
 })();
 </script>
 <!-- back to top -->
