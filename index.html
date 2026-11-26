@@ -92,7 +92,7 @@ footer{padding:30px 0 50px;color:#6b7488;font-size:13px;border-top:1px solid var
 <div class="wrap">
   <nav>
     <div class="logo">Au</div><b>Gold Bot</b><span class="sp"></span>
-    <a href="#features">Features</a><a href="#install">Install</a><a href="#risk">Risk</a><a href="#faq">FAQ</a>
+    <a href="#features">Features</a><a href="#install">Install</a><a href="guide.html">Guide</a><a href="#risk">Risk</a><a href="#faq">FAQ</a>
   </nav>
 
   <header class="hero">
@@ -103,6 +103,7 @@ footer{padding:30px 0 50px;color:#6b7488;font-size:13px;border-top:1px solid var
       <div class="cta">
         <a class="btn dl" href="https://github.com/sparkgrid-dev/goldbot-mt5/releases/latest/download/GoldBot.exe">⬇ Download v1.1 for Windows</a>
         <a class="btn ghost" href="#install">How to install</a>
+        <a class="btn ghost" href="guide.html">User guide</a>
       </div>
       <div class="meta">GoldBot.exe · version 1.1 · 24.8 MB · Windows 10/11 (64-bit)</div>
     </div>
@@ -138,7 +139,7 @@ footer{padding:30px 0 50px;color:#6b7488;font-size:13px;border-top:1px solid var
 
   <section id="install">
     <h2>Install in 4 steps</h2>
-    <p class="sub">You need a MetaTrader 5 terminal from your broker. A demo account is strongly recommended.</p>
+    <p class="sub">You need a MetaTrader 5 terminal from your broker. A demo account is strongly recommended. Full details, every setting and small-account tips are in the <a href="guide.html">User guide</a>.</p>
     <div class="steps">
       <div class="step"><div><h3>Install MetaTrader 5 and log in</h3><p>Download MT5 from your broker, log in to a <b>demo</b> account and add the gold symbol (XAUUSD / GOLD) to Market Watch.</p></div></div>
       <div class="step"><div><h3>Turn on Algo Trading</h3><p>In MT5 click the <b>Algo Trading</b> button in the toolbar so it turns green. Keep MT5 open while the bot runs.</p></div></div>
@@ -163,7 +164,7 @@ footer{padding:30px 0 50px;color:#6b7488;font-size:13px;border-top:1px solid var
     <h2>FAQ</h2>
     <details><summary>Windows says "Windows protected your PC". Is it safe?</summary><p>The app isn't code-signed, so SmartScreen warns about any new download. Check the file's fingerprint below matches before running it, then choose More info → Run anyway.</p></details>
     <details><summary>Where are my settings stored?</summary><p>In <code>%LOCALAPPDATA%\GoldBot</code> (config, activity history and trade log). Delete that folder to reset everything.</p></details>
-    <details><summary>Can I trade a live account?</summary><p>Not by default: the bot refuses live accounts. Unlocking it means editing <code>allow_live</code> in the config file yourself. Please test on demo first.</p></details>
+    <details><summary>Can I trade a live account?</summary><p>Not by default: the bot refuses live accounts. You can unlock it yourself at your own risk; the steps and warnings are in the <a href="guide.html#live">User guide, section 8</a>. Please test on demo first.</p></details>
     <details><summary>Does closing the app close my trades?</summary><p>No. Open trades stay in MetaTrader 5 with their stops and targets at the broker. Restarting the app never closes trades.</p></details>
     <details><summary>How do I uninstall?</summary><p>Delete <code>GoldBot.exe</code> and the <code>%LOCALAPPDATA%\GoldBot</code> folder. Nothing else is installed.</p></details>
     <details><summary>File fingerprint (SHA-256)</summary><p class="hash"><code>BCA86DDB6C2558D7EF057A49B74DF4998BA689237C2DFAAB6B9AC7399436D5B0</code><br>Check it in PowerShell with <code>Get-FileHash GoldBot.exe</code>.</p></details>

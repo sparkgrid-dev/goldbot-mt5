@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gold Bot · User Guide</title>
+<meta name="description" content="How to install, set up and use Gold Bot for MetaTrader 5: every setting explained, phone access, safety, troubleshooting.">
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05070d;--panel:rgba(12,16,26,.92);--line:rgba(255,255,255,.09);--ink:#e8edf6;--muted:#8f9ab0;--cy:#22d3ee;--au:#f2c14e;--au2:#b8860b;--bad:#fb7185;
+  --mono:"JetBrains Mono",Consolas,monospace;--ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font:16px/1.65 var(--ui);background:radial-gradient(900px 600px at 10% -10%,rgba(34,211,238,.08),transparent 60%),radial-gradient(800px 600px at 95% 0%,rgba(242,193,78,.07),transparent 60%),var(--bg);background-attachment:fixed}
+a{color:var(--cy)}
+nav{position:sticky;top:0;z-index:5;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(5,7,13,.8);border-bottom:1px solid var(--line)}
+nav .in{max-width:1100px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:12px}
+.logo{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font:800 14px var(--ui);color:#3a2a00;background:linear-gradient(135deg,#f6d77a,var(--au2));text-decoration:none}
+nav b{font-family:Orbitron,var(--ui);letter-spacing:.05em}
+nav .sp{flex:1}
+nav a.l{color:var(--muted);text-decoration:none;font-size:14px;margin-left:16px}
+nav a.l:hover{color:var(--ink)}
+.layout{max-width:1100px;margin:0 auto;padding:30px 20px 60px;display:grid;grid-template-columns:240px 1fr;gap:36px}
+aside{position:sticky;top:76px;align-self:start;font-size:14px}
+aside b{display:block;font:700 11px var(--ui);letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
+aside a{display:block;color:#aeb8ca;text-decoration:none;padding:5px 10px;border-left:2px solid var(--line)}
+aside a:hover{color:var(--ink);border-left-color:var(--cy)}
+main{min-width:0}
+h1{font-family:Orbitron,var(--ui);font-size:clamp(28px,4vw,38px);margin:0 0 6px;background:linear-gradient(90deg,#fff,#d7f6ff 55%,var(--au));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:#b8c2d4;margin:0 0 26px}
+h2{font-family:Orbitron,var(--ui);font-size:20px;letter-spacing:.03em;margin:44px 0 10px;scroll-margin-top:80px;padding-top:8px;border-top:1px solid var(--line)}
+h3{font-size:16px;margin:22px 0 6px}
+p,li{color:#c5cede}
+ul,ol{padding-left:22px}
+li{margin:4px 0}
+code,kbd{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#e8edf6}
+pre{font-family:var(--mono);font-size:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12.5px;letter-spacing:.04em}
+td:first-child{white-space:nowrap;color:var(--ink);font-weight:600}
+.box{border-radius:14px;padding:16px 18px;margin:16px 0;background:var(--panel);border:1px solid var(--line)}
+.tip{border-color:rgba(34,211,238,.3);background:rgba(34,211,238,.05)}
+.warn{border-color:rgba(251,113,133,.4);background:rgba(251,113,133,.07)}
+.warn b.t,.tip b.t{display:block;margin-bottom:4px}
+.warn b.t{color:#ffc2cc}.tip b.t{color:#9fe8f7}
+.danger{border:2px solid rgba(251,113,133,.6);background:rgba(251,113,133,.09);border-radius:16px;padding:20px}
+.danger h3{color:#ffc2cc;margin-top:0}
+footer{max-width:1100px;margin:0 auto;padding:24px 20px 40px;color:#6b7488;font-size:13px;border-top:1px solid var(--line)}
+@media (max-width:860px){.layout{grid-template-columns:1fr}aside{position:static}nav a.l{display:none}td:first-child{white-space:normal}}
+</style>
+</head>
+<body>
+<nav><div class="in">
+  <a class="logo" href="./">Au</a><b>Gold Bot</b><span class="sp"></span>
+  <a class="l" href="./">Home</a><a class="l" href="#install">Install</a><a class="l" href="#settings">Settings</a><a class="l" href="#trouble">Help</a>
+</div></nav>
+
+<div class="layout">
+<aside>
+  <b>Contents</b>
+  <a href="#start">1. Before you start</a>
+  <a href="#install">2. Install &amp; first run</a>
+  <a href="#tour">3. Dashboard tour</a>
+  <a href="#how">4. How it trades</a>
+  <a href="#settings">5. Settings explained</a>
+  <a href="#small">5b. Small accounts ($100)</a>
+  <a href="#safety">6. Safety features</a>
+  <a href="#phone">7. Phone access</a>
+  <a href="#live">8. Live trading (risk)</a>
+  <a href="#trouble">9. Troubleshooting</a>
+  <a href="#reset">10. Update, reset, uninstall</a>
+</aside>
+
+<main>
+<h1>User Guide</h1>
+<p class="lead">Everything you need to install Gold Bot, understand every setting, and run it safely. For version 1.1.</p>
+
+<div class="box warn"><b class="t">Read this first</b>Gold Bot is experimental. In our own 90-day tests on real gold ticks the strategy <b>lost money overall</b>. Use a <b>demo account</b>. Nothing here is financial advice.</div>
+
+<h2 id="start">1. Before you start</h2>
+<ul>
+  <li><b>A Windows 10 or 11 PC</b> (64-bit). The bot itself does not run on Mac, iPhone or Android (but you can view it on your phone, see <a href="#phone">Phone access</a>).</li>
+  <li><b>MetaTrader 5</b> (MT5) from your broker, installed and logged in. Start with a <b>demo account</b>.</li>
+  <li>The <b>gold symbol</b> (XAUUSD or GOLD) visible in MT5's Market Watch. The bot finds it automatically.</li>
+  <li>Keep the PC on and MT5 open while the bot trades. Sleep mode stops it.</li>
+</ul>
+
+<h2 id="install">2. Install &amp; first run</h2>
+<ol>
+  <li><b>Download</b> <code>GoldBot.exe</code> from the <a href="./">home page</a> and save it anywhere, for example your Desktop.</li>
+  <li><b>Open MT5</b>, log in to your demo account and click <b>Algo Trading</b> in the toolbar so it turns green.</li>
+  <li><b>Double-click</b> <code>GoldBot.exe</code>. If Windows shows <i>"Windows protected your PC"</i>, click <b>More info → Run anyway</b>. The app isn't code-signed; you can compare its fingerprint with the one on the home page first.</li>
+  <li>A black window opens (keep it open: closing it stops the bot) and your browser opens the dashboard at <code>http://127.0.0.1:8790</code>.</li>
+  <li><b>Check the settings</b> (section 5), then press <b>Start trading</b>. Trading is <b>always off</b> when the app starts.</li>
+</ol>
+<div class="box tip"><b class="t">Tip</b>Only one copy of the bot can run at a time. If you double-click it again, the second window just says it's already running.</div>
+
+<h2 id="tour">3. Dashboard tour</h2>
+<table>
+  <tr><th>Part</th><th>What it shows</th></tr>
+  <tr><td>Top bar</td><td>Status (Trading / Stopped), <b>Start / Stop trading</b>, and <b>Close bot trades</b> (closes every bot trade now at market price; asks first).</td></tr>
+  <tr><td>Robot banner</td><td>What the bot is doing right now in plain words: waiting for a candle, in a trade, paused, blocked and why.</td></tr>
+  <tr><td>Six tiles</td><td>Account (equity, balance, server, DEMO/LIVE badge), gold price and spread, trend signal (M1/M5 + last candles), today's losses with the daily-limit bar, today's profit, and open trades now.</td></tr>
+  <tr><td>Results</td><td>Totals since you pressed <b>Reset results</b>: total profit, profit per batch, trades, win rate, average win/loss, biggest loss, worst drop, and a per-day table.</td></tr>
+  <tr><td>Open trades</td><td>Every open bot trade with lots, entry, stop, target and live profit (scrolls when long).</td></tr>
+  <tr><td>Closed today</td><td>Opened / closed time, side, entry, exit and profit. <b>History</b> shows the last 30 days grouped by day; <b>Clear</b> only empties the panel.</td></tr>
+  <tr><td>Activity</td><td>The bot's log: every decision, order and close. <b>History</b> keeps everything, even after <b>Clear</b>.</td></tr>
+  <tr><td>Settings</td><td>All options (next sections). Changes apply after <b>Save settings</b>, except the Recovery ON/OFF switch, which saves instantly.</td></tr>
+</table>
+
+<h2 id="how">4. How it trades</h2>
+<p>At a set second of every 1-minute (M1) candle, usually second 30, the bot looks at the candle:</p>
+<ul>
+  <li><b>Direction:</b> by default it <i>follows</i> the candle: green → BUY, red → SELL.</li>
+  <li><b>Filters:</b> it only enters if the candle has moved enough, the wick isn't too long, and the trend / M5-candle rules you ticked agree.</li>
+  <li><b>Exit (simple mode, the default):</b> one trade at a time, closed at its stop, at the trailing profit, or at the chosen second of the candle.</li>
+  <li><b>Exit (basket mode):</b> opens a <i>batch</i> of trades together; each trade closes at its own small target at the broker; the batch has one shared stop. Optional <i>recovery</i> and <i>counter</i> batches (section 5).</li>
+</ul>
+<p>Every trade gets a <b>stop and target stored at your broker</b>, so trades stay protected even if the bot or PC is closed.</p>
+
+<h2 id="settings">5. Settings explained</h2>
+<p>Money amounts are in your account currency. "Gold move" means dollars of gold price (at 0.01 lots, a $1 gold move ≈ $1 profit or loss per trade; at 0.10 lots ≈ $10).</p>
+
+<h3>Size and targets</h3>
+<table>
+  <tr><th>Setting</th><th>What it does</th></tr>
+  <tr><td>Lot size per trade</td><td>Size of each trade. New installs start at 0.05 and are capped at 0.10 (the cap can only be changed in the config file). <b>Start with 0.01.</b></td></tr>
+  <tr><td>Trades per batch</td><td>How many trades open together (basket mode). 1 = one at a time.</td></tr>
+  <tr><td>Profit target per batch</td><td>Total target for a batch, split across its trades. The note below shows $ per trade and the gold move needed.</td></tr>
+  <tr><td>Stop loss per batch</td><td>The most a batch may lose before all its trades close (also stored at the broker). The note shows the gold move it allows.</td></tr>
+</table>
+
+<h3>Daily safety</h3>
+<table>
+  <tr><td>Daily loss limit</td><td>Counts <b>losses only</b> (losing closed trades + losing open trades; profits don't stretch it). When reached, the bot <b>closes everything and stops until the next day</b>. New installs: $750. Set this to an amount you can genuinely afford to lose in one day.</td></tr>
+  <tr><td>Max trades per day</td><td>No new trades after this many in a day.</td></tr>
+</table>
+
+<h3>When to enter</h3>
+<table>
+  <tr><td>Direction</td><td><i>Follow</i> (green → BUY) or <i>Reverse</i> (green → SELL).</td></tr>
+  <tr><td>Decide at second</td><td>The second of each candle when the bot decides.</td></tr>
+  <tr><td>Minimum candle move</td><td>The candle must be at least this far from its open (gold $). Filters out tiny noise.</td></tr>
+  <tr><td>Skip if the wick is over (%)</td><td>Skips a candle whose price has already pulled back this much from its push (0 = off).</td></tr>
+  <tr><td>M1 and M5 candles same colour</td><td>Also enters when both candles agree, even if trends don't.</td></tr>
+  <tr><td>M1 trend agrees / M5 trend agrees as well</td><td>Enters when the candle matches the trend(s).</td></tr>
+  <tr><td>Never trade against the M5 candle colour</td><td>Blocks a BUY on a red M5 candle and a SELL on a green one.</td></tr>
+</table>
+
+<h3>Recovery (basket mode)</h3>
+<div class="box warn"><b class="t">Highest-risk feature</b>Recovery adds more trades to a losing batch. It often rescues a batch, but when gold keeps moving against you, losses grow fast until the batch stop. Most large losses in testing came from recovery. Keep <i>Max recovery batches</i> small (1–2).</div>
+<table>
+  <tr><td>ON / OFF switch</td><td>Turns recovery on or off instantly.</td></tr>
+  <tr><td>Info box</td><td>Shows exactly where the next recovery batch opens (price) and how far down the batch would be there.</td></tr>
+  <tr><td>Trigger: gold move against</td><td>Adds a batch when gold has moved this far against the newest trade. You can also type the dollar loss or the exact gold price; the others update.</td></tr>
+  <tr><td>Max recovery batches</td><td>How many extra batches at most. <b>0 = unlimited</b> (not recommended).</td></tr>
+  <tr><td>Wait for a same-side signal</td><td>Also waits for a matching candle signal before adding (safer, slower).</td></tr>
+  <tr><td>Counter batches</td><td>While a batch is losing and the signal flips, opens an opposite batch (losing SELLs → BUY; losing BUYs → SELL).</td></tr>
+  <tr><td>Counter target / Max counter batches</td><td>Each counter trade's own target in gold $ (0 = same as the batch target), and how many counter batches may be open together.</td></tr>
+</table>
+
+<h3>Pauses</h3>
+<table>
+  <tr><td>Pause after a stop</td><td>Minutes with no new entries after a stop is hit (0 = off).</td></tr>
+  <tr><td>Break after wins in a row / Break length</td><td>After this many winning batches in a row, take a break of this many minutes (0 = off; a loss resets the count).</td></tr>
+</table>
+
+<h3>Phone access</h3>
+<table><tr><td>New PIN</td><td>6–12 digits, set on the PC only. Your phone asks for it; the PC never does. Setting a new PIN logs out all phones. See <a href="#phone">section 7</a>.</td></tr></table>
+
+<h3>Advanced</h3>
+<table>
+  <tr><td>Basket mode</td><td>On = batches with per-trade broker targets and a shared stop. Off = simple one-trade mode (default).</td></tr>
+  <tr><td>Put each trade's target at the broker</td><td>The broker closes each trade the instant its target is touched (recommended in basket mode).</td></tr>
+  <tr><td>Candle</td><td>M1 (1-minute) or M5 (5-minute) candles.</td></tr>
+  <tr><td>Max spread</td><td>No new trades while the spread is wider than this.</td></tr>
+  <tr><td>Trend averages</td><td>Lengths of the fast/slow moving averages that define the M1 and M5 trend.</td></tr>
+  <tr><td>Simple-mode options</td><td>Max loss per trade, close at second, safety stop/target and trailing profit (only used when basket mode is off).</td></tr>
+</table>
+
+<h2 id="small">5b. Small accounts (for example $100)</h2>
+<p>All the settings above are on the dashboard, so you can set the bot up for any account size. Small accounts need much smaller numbers, because gold moves fast and the default settings are sized for larger accounts.</p>
+<div class="box warn"><b class="t">Why small accounts need care</b>
+At 0.01 lots, a $10 move in gold is about <b>$10 per trade</b>. Gold often moves $10–20 in an hour. Each 0.01-lot gold trade also ties up roughly <b>$30–40 of margin</b> (at 1:100 leverage), so a $100 account can only hold <b>2–3 trades</b> at once. Batches of 5 or recovery batches can trigger a broker <b>stop-out</b> that closes everything at a large loss. Small accounts have been wiped this way.</div>
+<p>A careful starting point for about $100 (an example, not advice; try it on a <b>$100 demo account</b> first):</p>
+<table>
+  <tr><th>Setting</th><th>Suggested</th><th>Why</th></tr>
+  <tr><td>Lot size per trade</td><td>0.01</td><td>The smallest size: about $1 per $1 gold move.</td></tr>
+  <tr><td>Mode</td><td>Simple (basket mode off, the default)</td><td>One trade at a time fits a small account's margin.</td></tr>
+  <tr><td>Stop loss</td><td>$5–10</td><td>No single loss bigger than 5–10% of the account. In simple mode: <i>Advanced → Max loss per trade</i>. In basket mode: <i>Stop loss per batch</i>.</td></tr>
+  <tr><td>Profit</td><td>$1–2</td><td>Small, realistic targets: <i>Trailing profit</i> (simple mode) or <i>Profit target per batch</i> (basket mode).</td></tr>
+  <tr><td>If you use basket mode</td><td>Trades per batch 1–2</td><td>More trades per batch than the margin can carry risks a stop-out.</td></tr>
+  <tr><td>Daily loss limit</td><td>$10–15</td><td>Stops the day before a bad run grows (the default $750 is far too large).</td></tr>
+  <tr><td>Recovery</td><td>OFF</td><td>Recovery adds trades and margin; the biggest risk for small accounts.</td></tr>
+  <tr><td>Counter batches</td><td>OFF</td><td>Same reason: more open trades than $100 can carry.</td></tr>
+  <tr><td>Pause after a stop</td><td>5–15 min</td><td>Avoids jumping straight back into a fast move.</td></tr>
+  <tr><td>Max trades per day</td><td>20–50</td><td>Limits costs: every trade pays the spread.</td></tr>
+</table>
+<div class="box tip"><b class="t">Also check</b>Your broker's <b>leverage</b> and <b>stop-out level</b> (in your account details). A lower spread account (some brokers call it "Micro" or "Raw") makes a big difference for small targets, because the spread is paid on every trade.</div>
+
+<h2 id="safety">6. Safety features</h2>
+<ul>
+  <li><b>Demo only by default.</b> On a live account the bot refuses to trade (see <a href="#live">section 8</a>).</li>
+  <li><b>Broker-side stops and targets</b> on every trade.</li>
+  <li><b>Daily loss limit</b> (losses only) closes everything and stops for the day.</li>
+  <li><b>Restarting never closes trades.</b> The bot finds them again; press Start to keep managing them.</li>
+  <li><b>One copy only</b>, so two bots can't fight over the same trades.</li>
+  <li><b>Slipped fills fixed:</b> if the broker fills at a different price, the stop and target move to the real fill; a warning appears in Activity if that fails.</li>
+</ul>
+
+<h2 id="phone">7. Phone access (iPhone &amp; Android)</h2>
+<p>The bot keeps running on your PC; your phone opens the same dashboard privately through <b>Tailscale</b>, a free private network between your own devices. Nothing is put on the public internet.</p>
+<ol>
+  <li><b>Set a PIN:</b> on the PC dashboard, Settings → <b>Phone access</b>, enter a 6–12 digit PIN twice, <b>Save PIN</b>.</li>
+  <li><b>Install Tailscale</b> on the PC (tailscale.com/download) and on your phone (App Store / Google Play). Sign in with the <b>same account</b> on both.</li>
+  <li><b>Share the dashboard on your tailnet:</b> on the PC, open PowerShell and run:
+    <pre>tailscale serve --bg 8790</pre>
+    If Tailscale asks you to enable HTTPS for your network, follow its link and allow it. It prints an address like <code>https://your-pc.your-tailnet.ts.net</code>.</li>
+  <li><b>On your phone</b> (Tailscale switched on), open that address, enter your PIN.</li>
+  <li><b>Add to Home Screen:</b> iPhone: Safari → Share → <i>Add to Home Screen</i>. Android: Chrome → ⋮ → <i>Add to Home screen / Install app</i>. You get the gold "Au" app icon.</li>
+</ol>
+<div class="box tip"><b class="t">Good to know</b>The phone stays logged in for 30 days (use <b>Log out</b> on the phone to end it). 5 wrong PINs lock logins for 60 seconds. The PIN can only be changed on the PC. Your phone can reach only <i>your</i> PC, and only while the bot is running.</div>
+
+<h2 id="live">8. Live trading (at your own risk)</h2>
+<div class="danger">
+  <h3>⚠ Real money: please read carefully</h3>
+  <ul>
+    <li>In our own 90-day tests the strategy <b>lost money overall</b>. Short winning streaks are common and misleading.</li>
+    <li>Recovery and basket modes can turn a small loss into a very large one within minutes. Real accounts have been wiped this way.</li>
+    <li>Brokers may restrict or close accounts with very frequent automated orders.</li>
+    <li>You alone are responsible for every trade the bot places. This is not financial advice and there is no guarantee of profit.</li>
+  </ul>
+  <p>Only consider live trading after weeks of stable demo results, with money you can afford to lose completely. If you still choose to, this is how to unlock it:</p>
+  <ol>
+    <li>Close the bot (close its black window).</li>
+    <li>Press <kbd>Win</kbd> + <kbd>R</kbd>, type <code>%LOCALAPPDATA%\GoldBot</code> and press Enter.</li>
+    <li>Open <code>config.json</code> with Notepad.</li>
+    <li>Change <code>"allow_live": false</code> to <code>"allow_live": true</code> and save.</li>
+    <li>Start the bot again. The account tile shows a red <b>LIVE</b> badge.</li>
+  </ol>
+  <p>Before pressing Start on a live account: <b>lot 0.01</b>, a <b>small daily loss limit</b>, a <b>small stop per batch</b>, and <b>recovery off</b> or max 1 batch. To lock it again, set <code>allow_live</code> back to <code>false</code>.</p>
+</div>
+
+<h2 id="trouble">9. Troubleshooting</h2>
+<table>
+  <tr><th>Problem</th><th>What to do</th></tr>
+  <tr><td>"Algo Trading is OFF"</td><td>Click the <b>Algo Trading</b> button in MT5's toolbar so it turns green.</td></tr>
+  <tr><td>"This is a LIVE account"</td><td>The bot is demo-only by default. Log in to a demo account in MT5 (or read section 8).</td></tr>
+  <tr><td>"Your broker doesn't allow automated trading"</td><td>The account has trading disabled or no longer exists. Check MT5's <b>Journal</b> tab; open a new demo if needed.</td></tr>
+  <tr><td>Bot offline / page won't load</td><td>The black bot window was closed. Start <code>GoldBot.exe</code> again.</td></tr>
+  <tr><td>"Already running"</td><td>Another copy is open. Use that one, or close it first.</td></tr>
+  <tr><td>No trades for a long time</td><td>Normal when candles don't pass the filters, the spread is too wide, a pause is active, or the daily limit was reached. The robot banner says which.</td></tr>
+  <tr><td>"Spread … wider than the limit"</td><td>Wait, or raise Max spread in Advanced (wider spread = higher cost per trade).</td></tr>
+  <tr><td>Phone shows the login again</td><td>Your 30-day session ended or the PIN was changed. Log in again.</td></tr>
+  <tr><td>Phone can't open the address</td><td>Make sure Tailscale is ON on both devices with the same account, the bot is running, and <code>tailscale serve --bg 8790</code> was run on the PC.</td></tr>
+</table>
+
+<h2 id="reset">10. Update, reset, uninstall</h2>
+<ul>
+  <li><b>Update:</b> download the latest <code>GoldBot.exe</code> from the home page and replace the old file. Your settings and history are kept.</li>
+  <li><b>Reset settings:</b> close the bot and delete <code>%LOCALAPPDATA%\GoldBot\config.json</code>; it is recreated with defaults.</li>
+  <li><b>Uninstall:</b> delete <code>GoldBot.exe</code> and the <code>%LOCALAPPDATA%\GoldBot</code> folder. Nothing else is installed. If you set up phone access, you can also run <code>tailscale serve reset</code>.</li>
+</ul>
+</main>
+</div>
+<footer>Gold Bot is an independent tool, not affiliated with MetaQuotes, Tailscale or any broker. Trading leveraged products carries a high risk of loss. Not financial advice. <a href="./">Back to home</a></footer>
+</body>
+</html>
