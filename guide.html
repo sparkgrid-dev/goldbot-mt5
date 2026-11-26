@@ -7,59 +7,92 @@
 <meta name="description" content="How to install, set up and use Gold Bot for MetaTrader 5: every setting explained, phone access, safety, troubleshooting.">
 <link rel="icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#05070d;--panel:rgba(12,16,26,.92);--line:rgba(255,255,255,.09);--ink:#e8edf6;--muted:#8f9ab0;--cy:#22d3ee;--au:#f2c14e;--au2:#b8860b;--bad:#fb7185;
-  --mono:"JetBrains Mono",Consolas,monospace;--ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;color-scheme:dark}
+:root{--bg:#04060c;--ink:#eef2f8;--muted:#94a0b6;--line:rgba(255,255,255,.09);--cy:#22d3ee;--vi:#8b5cf6;--au:#f2c14e;--au2:#b8860b;--good:#34d399;--bad:#fb7185;
+  --ui:"Inter","Segoe UI",system-ui,sans-serif;--mono:"JetBrains Mono",Consolas,monospace;--disp:"Orbitron","Segoe UI",sans-serif;color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;color:var(--ink);font:16px/1.65 var(--ui);background:radial-gradient(900px 600px at 10% -10%,rgba(34,211,238,.08),transparent 60%),radial-gradient(800px 600px at 95% 0%,rgba(242,193,78,.07),transparent 60%),var(--bg);background-attachment:fixed}
-a{color:var(--cy)}
-nav{position:sticky;top:0;z-index:5;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:rgba(5,7,13,.8);border-bottom:1px solid var(--line)}
-nav .in{max-width:1100px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:12px}
-.logo{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font:800 14px var(--ui);color:#3a2a00;background:linear-gradient(135deg,#f6d77a,var(--au2));text-decoration:none}
-nav b{font-family:Orbitron,var(--ui);letter-spacing:.05em}
+body{margin:0;color:var(--ink);font:16px/1.7 var(--ui);background:var(--bg);overflow-x:hidden}
+a{color:var(--cy);text-decoration:none}
+a:hover{text-decoration:underline}
+.bg{position:fixed;inset:0;z-index:-3;pointer-events:none;background:radial-gradient(900px 600px at 12% -5%,rgba(34,211,238,.13),transparent 60%),radial-gradient(800px 600px at 95% 10%,rgba(139,92,246,.12),transparent 60%),radial-gradient(900px 700px at 60% 110%,rgba(242,193,78,.08),transparent 60%),var(--bg)}
+.floor{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
+.floor::before{content:"";position:absolute;left:-50%;right:-50%;bottom:-40%;height:75%;opacity:.35;background-image:linear-gradient(rgba(34,211,238,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.18) 1px,transparent 1px);background-size:70px 70px;transform:perspective(560px) rotateX(74deg);transform-origin:50% 100%;-webkit-mask-image:linear-gradient(to top,#000 5%,transparent 70%);mask-image:linear-gradient(to top,#000 5%,transparent 70%);animation:floor 6s linear infinite}
+@keyframes floor{to{background-position:0 70px}}
+#bits{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05}
+.glass{background:linear-gradient(160deg,rgba(20,27,44,.88),rgba(10,14,24,.88)) padding-box,linear-gradient(140deg,rgba(34,211,238,.45),rgba(255,255,255,.06) 40%,rgba(255,255,255,.04) 65%,rgba(242,193,78,.4)) border-box;border:1px solid transparent;border-radius:18px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 18px 50px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06)}
+/* nav (same as the home page) */
+nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(4,6,12,.66);border-bottom:1px solid var(--line)}
+nav .in{max-width:1180px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:14px}
+.logo{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font:800 16px var(--ui);color:#3a2a00;background:linear-gradient(135deg,#f6d77a,var(--au2));box-shadow:0 6px 22px rgba(242,193,78,.35);text-decoration:none!important}
+.brand b{display:block;font:800 18px var(--disp);letter-spacing:.05em;color:var(--ink)}
+.brand small{display:block;font-size:11.5px;color:var(--muted);margin-top:-2px}
 nav .sp{flex:1}
-nav a.l{color:var(--muted);text-decoration:none;font-size:14px;margin-left:16px}
-nav a.l:hover{color:var(--ink)}
-.layout{max-width:1100px;margin:0 auto;padding:30px 20px 60px;display:grid;grid-template-columns:240px 1fr;gap:36px}
-aside{position:sticky;top:76px;align-self:start;font-size:14px}
-aside b{display:block;font:700 11px var(--ui);letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
-aside a{display:block;color:#aeb8ca;text-decoration:none;padding:5px 10px;border-left:2px solid var(--line)}
-aside a:hover{color:var(--ink);border-left-color:var(--cy)}
+nav .links a{color:#b7c1d3;font-size:14px;margin-left:20px}
+nav .links a:hover{color:#fff;text-decoration:none}
+.navqr{display:flex;align-items:center;gap:10px;margin-left:22px;padding:6px 12px 6px 6px;border-radius:14px;font-size:12px;line-height:1.35;color:#b7c1d3}
+.navqr img{border-radius:9px;background:#fff;padding:4px;image-rendering:pixelated}
+.navqr b{display:block;color:var(--au);font-size:13px;letter-spacing:.04em}
+/* layout */
+.layout{max-width:1180px;margin:0 auto;padding:36px 22px 60px;display:grid;grid-template-columns:270px 1fr;gap:34px}
+aside{position:sticky;top:110px;align-self:start;padding:18px 14px;font-size:14px}
+aside b{display:block;font:600 11px var(--mono);letter-spacing:.14em;color:var(--cy);text-transform:uppercase;margin:0 10px 10px}
+aside a{display:block;color:#b7c1d3;padding:6px 10px;border-radius:9px;border-left:2px solid transparent;transition:background .2s,border-color .2s}
+aside a:hover{background:rgba(34,211,238,.08);border-left-color:var(--cy);color:#fff;text-decoration:none}
 main{min-width:0}
-h1{font-family:Orbitron,var(--ui);font-size:clamp(28px,4vw,38px);margin:0 0 6px;background:linear-gradient(90deg,#fff,#d7f6ff 55%,var(--au));-webkit-background-clip:text;background-clip:text;color:transparent}
-.lead{color:#b8c2d4;margin:0 0 26px}
-h2{font-family:Orbitron,var(--ui);font-size:20px;letter-spacing:.03em;margin:44px 0 10px;scroll-margin-top:80px;padding-top:8px;border-top:1px solid var(--line)}
-h3{font-size:16px;margin:22px 0 6px}
+.hero{padding:26px 28px;margin-bottom:22px}
+.eyebrow{font:600 12px var(--mono);letter-spacing:.14em;color:var(--cy);text-transform:uppercase}
+h1{font:800 clamp(30px,4vw,44px)/1.1 var(--disp);margin:6px 0 8px;background:linear-gradient(95deg,#fff 10%,#c9f4ff 45%,var(--au) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:#b9c3d5;margin:0}
+h2{font:800 21px var(--disp);letter-spacing:.03em;margin:46px 0 12px;scroll-margin-top:110px;display:flex;align-items:center;gap:12px}
+h2::before{content:"";width:6px;height:26px;border-radius:3px;background:linear-gradient(var(--cy),var(--au));box-shadow:0 0 14px rgba(34,211,238,.5);flex:none}
+h3{font-size:16.5px;margin:24px 0 8px;color:#fff}
 p,li{color:#c5cede}
 ul,ol{padding-left:22px}
-li{margin:4px 0}
-code,kbd{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#e8edf6}
-pre{font-family:var(--mono);font-size:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0}
-th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:var(--muted);font-weight:600;font-size:12.5px;letter-spacing:.04em}
-td:first-child{white-space:nowrap;color:var(--ink);font-weight:600}
-.box{border-radius:14px;padding:16px 18px;margin:16px 0;background:var(--panel);border:1px solid var(--line)}
-.tip{border-color:rgba(34,211,238,.3);background:rgba(34,211,238,.05)}
-.warn{border-color:rgba(251,113,133,.4);background:rgba(251,113,133,.07)}
+li{margin:5px 0}
+b{color:#fff}
+code,kbd{font-family:var(--mono);font-size:.86em;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#e8edf6}
+pre{font-family:var(--mono);font-size:14px;background:rgba(0,0,0,.35);border:1px solid rgba(34,211,238,.25);border-radius:12px;padding:12px 14px;overflow-x:auto;color:#9fe8f7}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:14.5px;margin:12px 0;border-radius:14px;overflow:hidden;background:rgba(14,19,32,.75);border:1px solid var(--line)}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{color:var(--cy);font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;background:rgba(34,211,238,.06)}
+td:first-child{white-space:nowrap;color:#fff;font-weight:600}
+tr:hover td{background:rgba(255,255,255,.02)}
+.box{border-radius:16px;padding:16px 18px;margin:16px 0;background:rgba(14,19,32,.8);border:1px solid var(--line)}
+.tip{border-color:rgba(34,211,238,.35);background:linear-gradient(135deg,rgba(34,211,238,.08),rgba(14,19,32,.85))}
+.warn{border-color:rgba(251,113,133,.45);background:linear-gradient(135deg,rgba(251,113,133,.09),rgba(14,19,32,.85))}
 .warn b.t,.tip b.t{display:block;margin-bottom:4px}
 .warn b.t{color:#ffc2cc}.tip b.t{color:#9fe8f7}
-.danger{border:2px solid rgba(251,113,133,.6);background:rgba(251,113,133,.09);border-radius:16px;padding:20px}
+.danger{border:1px solid rgba(251,113,133,.6);background:linear-gradient(135deg,rgba(251,113,133,.12),rgba(14,19,32,.9));border-radius:18px;padding:22px;box-shadow:0 0 40px rgba(251,113,133,.12)}
 .danger h3{color:#ffc2cc;margin-top:0}
-footer{max-width:1100px;margin:0 auto;padding:24px 20px 40px;color:#6b7488;font-size:13px;border-top:1px solid var(--line)}
-@media (max-width:860px){.layout{grid-template-columns:1fr}aside{position:static}nav a.l{display:none}td:first-child{white-space:normal}}
+footer{border-top:1px solid var(--line);margin-top:20px;padding:30px 22px 50px;color:#6f7a90;font-size:13px}
+footer .in{max-width:1180px;margin:0 auto;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+footer img{width:42px;height:42px;border-radius:12px}
+footer b{color:#cdd6e4}
+@media (max-width:900px){.layout{grid-template-columns:1fr}aside{position:static}nav .links,.navqr{display:none}td:first-child{white-space:normal}}
+@media (prefers-reduced-motion:reduce){.floor::before{animation:none}#bits{display:none}}
+@media (prefers-reduced-transparency:reduce){.glass{backdrop-filter:none;-webkit-backdrop-filter:none}}
 </style>
+
 </head>
 <body>
+<div class="bg"></div><div class="floor"></div><canvas id="bits"></canvas>
 <nav><div class="in">
-  <a class="logo" href="./">Au</a><b>Gold Bot</b><span class="sp"></span>
-  <a class="l" href="./">Home</a><a class="l" href="#install">Install</a><a class="l" href="#settings">Settings</a><a class="l" href="#trouble">Help</a>
+  <a class="logo" href="./">Au</a>
+  <div class="brand"><b>Gold Bot</b><small>User guide · by sparkgrid-dev</small></div>
+  <span class="sp"></span>
+  <div class="links"><a href="./">Home</a><a href="#install">Install</a><a href="#settings">Settings</a><a href="#phone">Phone</a><a href="#trouble">Help</a></div>
+  <div class="navqr glass" title="Scan with your phone camera">
+    <img src="qr-website.png" alt="QR code that opens the website" width="70" height="70">
+    <div><b>Scan me</b>Open on your phone<br><a href="goldbot-qr-website.png" download>Save QR card</a></div>
+  </div>
 </div></nav>
 
+
 <div class="layout">
-<aside>
+<aside class="glass">
   <b>Contents</b>
   <a href="#start">1. Before you start</a>
   <a href="#install">2. Install &amp; first run</a>
@@ -75,8 +108,7 @@ footer{max-width:1100px;margin:0 auto;padding:24px 20px 40px;color:#6b7488;font-
 </aside>
 
 <main>
-<h1>User Guide</h1>
-<p class="lead">Everything you need to install Gold Bot, understand every setting, and run it safely. For version 1.4.</p>
+<div class="hero glass"><div class="eyebrow">Gold Bot · Documentation</div><h1>User Guide</h1><p class="lead">Everything you need to install Gold Bot, understand every setting, and run it safely. For version 1.4.</p></div>
 
 <div class="box warn"><b class="t">Read this first</b>Gold Bot is experimental. In our own 90-day tests on real gold ticks the strategy <b>lost money overall</b>. Use a <b>demo account</b>. Nothing here is financial advice.</div>
 
@@ -282,6 +314,7 @@ At 0.01 lots, a $10 move in gold is about <b>$10 per trade</b>. Gold often moves
 </ul>
 </main>
 </div>
-<footer>Gold Bot is an independent tool, not affiliated with MetaQuotes, Tailscale or any broker. Trading leveraged products carries a high risk of loss. Not financial advice. <a href="./">Back to home</a></footer>
+<footer><div class="in"><img src="sparkgrid.png" alt="sparkgrid-dev logo"><div><b>Gold Bot</b> · built by <a href="https://github.com/sparkgrid-dev">sparkgrid-dev</a> · <a href="./">Back to home</a><br>An independent tool, not affiliated with MetaQuotes, Tailscale or any broker. Trading leveraged products carries a high risk of loss. Not financial advice.</div></div></footer>
+<script>(()=>{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;const c=document.getElementById("bits"),x=c.getContext("2d");let cols=[],fs=16,l=0;const s=()=>{c.width=innerWidth;c.height=innerHeight;cols=Array(Math.ceil(c.width/fs)).fill(0).map(()=>Math.random()*-60)};s();addEventListener("resize",s);const r=t=>{if(t-l>90){l=t;x.fillStyle="rgba(4,6,12,.2)";x.fillRect(0,0,c.width,c.height);x.font=fs+"px JetBrains Mono, Consolas, monospace";cols.forEach((y,i)=>{x.fillStyle=Math.random()<.07?"#f2c14e":"#22d3ee";x.fillText(Math.random()<.5?"0":"1",i*fs,y*fs);cols[i]=y*fs>c.height&&Math.random()>.975?0:y+1})}requestAnimationFrame(r)};requestAnimationFrame(r)})();</script>
 </body>
 </html>

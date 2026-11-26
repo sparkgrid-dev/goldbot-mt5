@@ -4,181 +4,402 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gold Bot · MT5 Gold Scalper</title>
-<meta name="description" content="Gold Bot: a desktop dashboard and automated M1 gold scalper for MetaTrader 5. Demo-only by default.">
+<meta name="description" content="Gold Bot: an automated M1 gold scalper with a live dashboard for MetaTrader 5. Ready-made setups from $100, phone app, demo-only by default.">
 <link rel="icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=JetBrains+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#05070d; --panel:rgba(12,16,26,.92); --line:rgba(255,255,255,.09); --ink:#e8edf6; --muted:#8f9ab0;
-  --cy:#22d3ee; --au:#f2c14e; --au2:#b8860b; --good:#34d399; --bad:#fb7185;
-  --mono:"JetBrains Mono",Consolas,monospace; --ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;
+  --bg:#04060c; --ink:#eef2f8; --muted:#94a0b6; --line:rgba(255,255,255,.09);
+  --glass:rgba(14,19,32,.62); --glass2:rgba(255,255,255,.045);
+  --cy:#22d3ee; --vi:#8b5cf6; --au:#f2c14e; --au2:#b8860b; --good:#34d399; --bad:#fb7185;
+  --ui:"Inter","Segoe UI",system-ui,sans-serif; --mono:"JetBrains Mono",Consolas,monospace; --disp:"Orbitron","Segoe UI",sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;color:var(--ink);font:16px/1.6 var(--ui);
-  background:radial-gradient(1000px 650px at 10% -10%,rgba(34,211,238,.10),transparent 60%),
-             radial-gradient(900px 600px at 95% 0%,rgba(242,193,78,.09),transparent 60%),var(--bg);
-  background-attachment:fixed}
-.floor{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-.floor::before{content:"";position:absolute;left:-50%;right:-50%;bottom:-35%;height:80%;opacity:.35;
-  background-image:linear-gradient(rgba(34,211,238,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.14) 1px,transparent 1px);
-  background-size:64px 64px;transform:perspective(520px) rotateX(72deg);transform-origin:50% 100%;
-  -webkit-mask-image:linear-gradient(to top,#000,transparent 75%);mask-image:linear-gradient(to top,#000,transparent 75%);animation:floor 6s linear infinite}
-@keyframes floor{to{background-position:0 64px}}
-a{color:var(--cy)}
-.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-nav{display:flex;align-items:center;gap:12px;padding:18px 0}
-.logo{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font:800 16px var(--ui);color:#3a2a00;background:linear-gradient(135deg,#f6d77a,var(--au2));box-shadow:0 4px 18px rgba(242,193,78,.3)}
-nav b{font:800 18px var(--disp,Orbitron),sans-serif;font-family:Orbitron,var(--ui);letter-spacing:.05em}
+body{margin:0;color:var(--ink);font:16px/1.6 var(--ui);background:var(--bg);overflow-x:hidden}
+a{color:var(--cy);text-decoration:none}
+img{display:block}
+
+/* ---------- living background ---------- */
+.bg{position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:radial-gradient(900px 600px at 12% -5%,rgba(34,211,238,.16),transparent 60%),
+             radial-gradient(800px 600px at 95% 10%,rgba(139,92,246,.14),transparent 60%),
+             radial-gradient(900px 700px at 60% 110%,rgba(242,193,78,.10),transparent 60%),var(--bg)}
+.floor{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
+.floor::before{content:"";position:absolute;left:-50%;right:-50%;bottom:-38%;height:80%;opacity:.45;
+  background-image:linear-gradient(rgba(34,211,238,.18) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.18) 1px,transparent 1px);
+  background-size:70px 70px;transform:perspective(560px) rotateX(74deg);transform-origin:50% 100%;
+  -webkit-mask-image:linear-gradient(to top,#000 5%,transparent 70%);mask-image:linear-gradient(to top,#000 5%,transparent 70%);animation:floor 6s linear infinite}
+@keyframes floor{to{background-position:0 70px}}
+#bits{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.07}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.glass{background:linear-gradient(160deg,rgba(20,27,44,.86),rgba(10,14,24,.86)) padding-box,
+      linear-gradient(140deg,rgba(34,211,238,.45),rgba(255,255,255,.06) 40%,rgba(255,255,255,.04) 65%,rgba(242,193,78,.4)) border-box;
+  border:1px solid transparent;border-radius:20px;backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
+  box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.07)}
+
+/* ---------- nav ---------- */
+nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(4,6,12,.62);border-bottom:1px solid var(--line)}
+nav .in{max-width:1180px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:14px}
+.logo{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font:800 16px var(--ui);color:#3a2a00;background:linear-gradient(135deg,#f6d77a,var(--au2));box-shadow:0 6px 22px rgba(242,193,78,.35)}
+.brand b{display:block;font:800 18px var(--disp);letter-spacing:.05em}
+.brand small{display:block;font-size:11.5px;color:var(--muted);letter-spacing:.04em;margin-top:-2px}
 nav .sp{flex:1}
-nav a{color:var(--muted);text-decoration:none;font-size:14px;margin-left:18px}
-nav a:hover{color:var(--ink)}
-
-.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:50px 0 40px}
-.tag.new{color:#1b1404;background:linear-gradient(135deg,#f6d77a,#b8860b);border-color:transparent;text-decoration:none;margin-left:6px}
-.tag{display:inline-block;font:600 12px var(--mono);letter-spacing:.08em;color:var(--cy);border:1px solid rgba(34,211,238,.35);border-radius:99px;padding:4px 12px}
-h1{font-family:Orbitron,var(--ui);font-weight:800;font-size:clamp(34px,5vw,54px);line-height:1.1;margin:16px 0 14px;letter-spacing:.01em;
-  background:linear-gradient(90deg,#fff,#d7f6ff 50%,var(--au));-webkit-background-clip:text;background-clip:text;color:transparent}
-.lead{color:#b8c2d4;font-size:18px;max-width:34em}
-.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:26px}
-.btn{display:inline-flex;align-items:center;gap:10px;font:700 16px var(--ui);text-decoration:none;border-radius:12px;padding:14px 22px;transition:transform .12s,filter .2s}
-.btn:hover{filter:brightness(1.08)}.btn:active{transform:scale(.98)}
-.btn.dl{background:linear-gradient(135deg,#f6d77a,var(--au2));color:#1b1404;box-shadow:0 8px 26px rgba(212,160,23,.3)}
-.btn.ghost{color:var(--ink);border:1px solid var(--line);background:rgba(255,255,255,.04)}
-.navqr{display:flex;align-items:center;gap:10px;margin-left:22px;padding:6px 12px 6px 6px;border:1px solid rgba(242,193,78,.35);border-radius:14px;background:rgba(12,16,26,.85);font-size:12px;line-height:1.35;color:#aab4c6;box-shadow:0 0 22px rgba(242,193,78,.12)}
-.navqr img{flex:none;border-radius:9px;background:#fff;padding:4px;image-rendering:pixelated}
+nav .links a{color:#b7c1d3;font-size:14px;margin-left:20px;transition:color .2s}
+nav .links a:hover{color:#fff}
+.navqr{display:flex;align-items:center;gap:10px;margin-left:22px;padding:6px 12px 6px 6px;border-radius:14px;font-size:12px;line-height:1.35;color:#b7c1d3}
+.navqr img{border-radius:9px;background:#fff;padding:4px;image-rendering:pixelated}
 .navqr b{display:block;color:var(--au);font-size:13px;letter-spacing:.04em}
-nav .navqr a{margin-left:0;font-size:12px;color:var(--cy)}
-.meta{font:12.5px var(--mono);color:var(--muted);margin-top:12px}
 
-/* dashboard mock (illustration, not real data) */
-.mock{position:relative;border-radius:18px;padding:14px;background:var(--panel);border:1px solid rgba(34,211,238,.25);box-shadow:0 30px 70px rgba(0,0,0,.55);transform:perspective(900px) rotateY(-8deg) rotateX(4deg);animation:float 7s ease-in-out infinite}
-@keyframes float{50%{translate:0 -6px}}
-.mock .bar{display:flex;gap:6px;margin-bottom:10px}.mock .bar i{width:9px;height:9px;border-radius:50%;background:#2a3142}
-.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.tile{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:rgba(255,255,255,.025)}
-.tile span{display:block;font-size:10px;letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
-.tile b{font:700 16px var(--mono)}
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:1.02fr 1fr;gap:40px;align-items:center;min-height:calc(100vh - 66px);padding:40px 0 30px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.pill{font:600 11.5px var(--mono);letter-spacing:.08em;padding:6px 12px;border-radius:99px;border:1px solid rgba(34,211,238,.35);color:var(--cy);background:rgba(34,211,238,.06)}
+.pill.au{color:#1b1404;background:linear-gradient(135deg,#f6d77a,var(--au2));border-color:transparent}
+h1{font:800 clamp(36px,5.2vw,64px)/1.04 var(--disp);letter-spacing:.005em;margin:0 0 18px;
+  background:linear-gradient(95deg,#ffffff 10%,#c9f4ff 45%,var(--au) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:18.5px;color:#b9c3d5;max-width:33em;margin:0 0 26px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:10px;font:700 16px var(--ui);border-radius:14px;padding:15px 24px;transition:transform .15s,box-shadow .25s,filter .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}
+.btn.dl{color:#1b1404;background:linear-gradient(135deg,#f8dc84,#d4a017);box-shadow:0 10px 34px rgba(212,160,23,.38)}
+.btn.dl:hover{box-shadow:0 14px 44px rgba(212,160,23,.55)}
+.btn.gh{color:var(--ink);border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05)}
+.btn.gh:hover{background:rgba(255,255,255,.09)}
+.meta{font:12.5px var(--mono);color:var(--muted);margin-top:14px}
+
+/* floating dashboard: a real-looking panel at a gentle 3D angle, with two small cards in front */
+.stage{position:relative;height:520px;perspective:1800px;display:grid;place-items:center}
+.scene{position:relative;width:540px;max-width:100%;transform-style:preserve-3d;transform:rotateY(-14deg) rotateX(6deg);transition:transform .3s ease-out}
+.dash{padding:18px;border-radius:22px;animation:bob 8s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.dash .top{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.dash .top i{width:9px;height:9px;border-radius:50%;background:#2a3142}
+.dash .top span{margin-left:8px;font:700 12px var(--disp);letter-spacing:.1em;color:#9fb0c8}
+.dash .top em{margin-left:auto;font:600 11px var(--mono);font-style:normal;color:var(--good);border:1px solid rgba(52,211,153,.4);padding:2px 9px;border-radius:99px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tile{border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.tile span{display:block;font-size:10px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.tile b{font:700 18px var(--mono)}
 .pos{color:var(--good)}.neg{color:var(--bad)}
-.spark{height:70px;margin-top:10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02)}
-.mock small{display:block;text-align:right;color:#5d6678;font-size:10.5px;margin-top:8px}
+.chart{margin-top:12px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid var(--line);overflow:hidden}
+.chart svg{width:100%;height:100%;display:block}
+.float{position:absolute;padding:11px 14px;border-radius:16px;display:flex;gap:11px;align-items:center;transform:translateZ(70px)}
+.float.bot{left:-46px;top:-34px;animation:bob 7s ease-in-out infinite -2s}
+.float.win{right:-40px;bottom:-30px;animation:bob 6s ease-in-out infinite -4s}
+.botface{width:40px;height:40px;border-radius:12px;flex:none;background:#0b1020;border:1px solid rgba(34,211,238,.45);display:grid;place-items:center;box-shadow:0 0 16px rgba(34,211,238,.35)}
+.botface i{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 10px var(--good);margin:0 3px;display:inline-block}
+.float b{display:block;font:700 10.5px var(--disp);letter-spacing:.12em;color:var(--good)}
+.float small{font:12px var(--mono);color:#d6deea}
+.coin{width:40px;height:40px;border-radius:12px;flex:none;display:grid;place-items:center;font:800 15px var(--ui);color:#3a2a00;background:linear-gradient(135deg,#f8dc84,var(--au2))}
+.glow{position:absolute;left:50%;top:58%;width:560px;height:200px;margin-left:-280px;border-radius:50%;background:radial-gradient(closest-side,rgba(34,211,238,.22),transparent);filter:blur(14px);z-index:-1}
+.tag-illus{position:absolute;right:6px;bottom:0;font-size:11px;color:#5f6a80}
 
-section{padding:46px 0}
-h2{font-family:Orbitron,var(--ui);font-size:24px;letter-spacing:.03em;margin:0 0 8px}
-.sub{color:var(--muted);margin:0 0 24px}
+/* Monte Carlo fan chart: many jagged green paths, one bright white path, percentile bands */
+.chart.mc{height:auto;padding:8px 10px 6px;background:linear-gradient(180deg,rgba(242,193,78,.05),rgba(0,0,0,.25));border:1px solid rgba(242,193,78,.35);box-shadow:inset 0 0 30px rgba(242,193,78,.06)}
+.mchead{display:flex;justify-content:space-between;font:600 9.5px var(--mono);letter-spacing:.12em;color:#9aa6bb;padding:2px 2px 4px}
+.mchead .au{color:var(--au)}
+#mc{width:100%;height:auto;display:block}
+#mc .p{fill:none;stroke:rgba(74,222,128,.24);stroke-width:1.1;stroke-linejoin:round}
+#mc .p.hi{stroke:rgba(134,239,172,.5)}
+#mc .band{fill:none;stroke:rgba(242,193,78,.65);stroke-width:1.2;stroke-dasharray:4 4}
+#mc .band.mid{stroke:rgba(242,193,78,.9)}
+#mc .divider{stroke:rgba(255,255,255,.18);stroke-dasharray:3 4}
+#mc .lab{font:600 9px var(--mono);letter-spacing:.14em;fill:#22d3ee;text-anchor:middle}
+#mc .pct{font:600 9px var(--mono);fill:var(--au);text-anchor:end}
+#mc .main{fill:none;stroke:#fff;stroke-width:2.2;stroke-linejoin:round;filter:url(#zap)}
+#mc .mainglow{fill:none;stroke:rgba(74,222,128,.55);stroke-width:7;filter:url(#greenglow)}
+#mc .spark{fill:#fff}
+#mc .grow{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:grow 2.6s ease-out forwards}
+@keyframes grow{to{stroke-dashoffset:0}}
+#mc .main.flick{animation:flick 3.8s 1s infinite}
+@keyframes flick{0%,90%,100%{opacity:1}92%{opacity:.35}94%{opacity:1}96%{opacity:.6}}
+/* ---------- stats strip ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:10px 0 70px}
+.stat{padding:18px 20px}
+.stat b{display:block;font:800 26px var(--disp);background:linear-gradient(90deg,#fff,var(--au));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{font-size:14px;color:#aeb8ca}
+
+/* ---------- sections ---------- */
+section{padding:30px 0 70px}
+.eyebrow{font:600 12px var(--mono);letter-spacing:.14em;color:var(--cy);text-transform:uppercase}
+h2{font:800 clamp(24px,3vw,34px) var(--disp);margin:6px 0 10px;letter-spacing:.02em}
+.sub{color:var(--muted);max-width:40em;margin:0 0 30px}
+
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;position:relative}
+.flow::before{content:"";position:absolute;left:12%;right:12%;top:40px;height:2px;background:linear-gradient(90deg,var(--cy),var(--vi),var(--au));opacity:.6;box-shadow:0 0 14px rgba(34,211,238,.6)}
+.step{padding:22px;position:relative;text-align:center}
+.num{width:58px;height:58px;margin:-4px auto 14px;border-radius:16px;display:grid;place-items:center;font:800 22px var(--disp);color:#1b1404;background:linear-gradient(135deg,#f8dc84,var(--au2));box-shadow:0 0 0 6px rgba(4,6,12,.9),0 10px 30px rgba(212,160,23,.35);position:relative}
+.step h3{margin:0 0 6px;font-size:18px}
+.step p{margin:0;color:#aeb8ca;font-size:14.5px}
+
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.card{position:relative;border-radius:16px;padding:20px;background:var(--panel);border:1px solid var(--line)}
-.card::before{content:"";position:absolute;top:8px;left:8px;width:12px;height:12px;border-top:2px solid var(--cy);border-left:2px solid var(--cy);border-radius:3px 0 0 0;opacity:.6}
-.card h3{margin:0 0 6px;font-size:16px}
+.card{padding:22px;transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-6px);box-shadow:0 26px 70px rgba(0,0,0,.55),0 0 0 1px rgba(34,211,238,.25)}
+.ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px;background:rgba(34,211,238,.10);border:1px solid rgba(34,211,238,.3)}
+.ic svg{width:22px;height:22px;stroke:var(--cy);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card h3{margin:0 0 6px;font-size:16.5px}
 .card p{margin:0;color:#aab4c6;font-size:14.5px}
-.steps{counter-reset:s;display:grid;gap:12px}
-.step{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;border-radius:14px;padding:16px;background:var(--panel);border:1px solid var(--line)}
-.step::before{counter-increment:s;content:counter(s);width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font:700 18px var(--mono);color:#1b1404;background:linear-gradient(135deg,#f6d77a,var(--au2))}
-.step h3{margin:2px 0 4px;font-size:16px}.step p{margin:0;color:#aab4c6;font-size:14.5px}
-code,kbd{font-family:var(--mono);font-size:.9em;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
-.warn{border-radius:16px;padding:22px;background:rgba(251,113,133,.07);border:1px solid rgba(251,113,133,.35)}
-.warn h2{color:#ffd1d8}
-.warn ul{margin:10px 0 0;padding-left:20px;color:#e9c9cf}
-details{border-radius:12px;padding:14px 16px;background:var(--panel);border:1px solid var(--line);margin-bottom:10px}
+
+.install{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.ins{padding:20px}
+.ins .n{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:9px;font:700 15px var(--mono);color:#1b1404;background:linear-gradient(135deg,#f8dc84,var(--au2));margin-bottom:10px}
+.ins p b{color:#fff;font-weight:600}
+.ins h3{margin:0 0 4px;font-size:16px}
+.ins p{margin:0;color:#aab4c6;font-size:14px}
+code{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:#e8edf6}
+
+.risk{padding:26px;border-radius:20px;background:rgba(251,113,133,.07);border:1px solid rgba(251,113,133,.4)}
+.risk h2{color:#ffd1d8;font-size:22px}
+.risk ul{margin:8px 0 0;padding-left:20px;color:#ecc9cf}
+
+details{padding:16px 18px;margin-bottom:10px;border-radius:14px}
 summary{cursor:pointer;font-weight:600}
 details p{color:#aab4c6;margin:10px 0 0;font-size:14.5px}
 .hash{word-break:break-all}
-footer{padding:30px 0 50px;color:#6b7488;font-size:13px;border-top:1px solid var(--line);margin-top:20px}
-@media (max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:860px){.hero{grid-template-columns:1fr}.mock{transform:none}.cards{grid-template-columns:1fr}nav a{display:none}.navqr{display:none}}
-@media (prefers-reduced-motion:reduce){.floor::before,.mock{animation:none}}
+
+footer{border-top:1px solid var(--line);margin-top:30px;padding:30px 0 50px;color:#6f7a90;font-size:13px}
+footer .in{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+footer img{width:42px;height:42px;border-radius:12px}
+footer b{color:#cdd6e4}
+
+/* reveal on scroll */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+
+@media (max-width:1000px){.hero{grid-template-columns:1fr;min-height:0}.stage{height:460px}.stats,.cards,.install{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){nav .links,.navqr{display:none}.stats,.cards,.install,.flow{grid-template-columns:1fr}.flow::before{display:none}.stage{height:auto;padding:40px 10px 50px}.float.bot{left:-6px}.float.win{right:-6px}.btn{width:100%;justify-content:center}}
+@media (prefers-reduced-motion:reduce){.floor::before,.dash,.float{animation:none}#mc .spark{display:none}#bits{display:none}.rv{opacity:1;transform:none;transition:none}}
+@media (prefers-reduced-transparency:reduce){.glass{backdrop-filter:none;-webkit-backdrop-filter:none;background:linear-gradient(#0e1424,#0e1424) padding-box,linear-gradient(140deg,rgba(34,211,238,.45),rgba(242,193,78,.4)) border-box}}
 </style>
 </head>
 <body>
-<div class="floor"></div>
-<div class="wrap">
-  <nav>
-    <div class="logo">Au</div><b>Gold Bot</b><span class="sp"></span>
-    <a href="#features">Features</a><a href="#install">Install</a><a href="guide.html">Guide</a><a href="#risk">Risk</a><a href="#faq">FAQ</a>
-    <div class="navqr" title="Scan with your phone camera">
-      <img src="qr-website.png" alt="QR code that opens this page" width="76" height="76">
-      <div><b>Scan me</b>Open on your phone<br><a href="goldbot-qr-website.png" download>Save QR card</a></div>
-    </div>
-  </nav>
+<div class="bg"></div><div class="floor"></div><canvas id="bits"></canvas>
 
+<nav><div class="in">
+  <div class="logo">Au</div>
+  <div class="brand"><b>Gold Bot</b><small>by sparkgrid-dev</small></div>
+  <span class="sp"></span>
+  <div class="links"><a href="#how">How it works</a><a href="#features">Features</a><a href="#install">Install</a><a href="guide.html">Guide</a><a href="#faq">FAQ</a></div>
+  <div class="navqr glass" title="Scan with your phone camera">
+    <img src="qr-website.png" alt="QR code that opens this page" width="70" height="70">
+    <div><b>Scan me</b>Open on your phone<br><a href="goldbot-qr-website.png" download>Save QR card</a></div>
+  </div>
+</div></nav>
+
+<div class="wrap">
   <header class="hero">
     <div>
-      <span class="tag">METATRADER 5 · XAUUSD · WINDOWS</span> <a class="tag new" href="https://github.com/sparkgrid-dev/goldbot-mt5/releases/tag/v1.4">NEW · v1.4: ready-made setups from $100</a>
-      <h1>An automated gold scalper with a live dashboard</h1>
-      <p class="lead">Gold Bot connects to your MetaTrader 5 terminal, reads every 1-minute gold candle and manages trade baskets with broker-side stops, a daily loss limit and a clean control panel in your browser.</p>
+      <div class="pills"><span class="pill">METATRADER 5 · XAUUSD · WINDOWS</span><a class="pill au" href="https://github.com/sparkgrid-dev/goldbot-mt5/releases/tag/v1.4">NEW · v1.4: setups from $100</a></div>
+      <h1>Gold scalping, on autopilot.</h1>
+      <p class="lead">Gold Bot reads every 1-minute gold candle in MetaTrader 5, opens and manages trade baskets with broker-side stops and a daily loss limit, and shows everything on a live dashboard, on your PC or your phone.</p>
       <div class="cta">
         <a class="btn dl" href="https://github.com/sparkgrid-dev/goldbot-mt5/releases/latest/download/GoldBot.exe">⬇ Download v1.4 for Windows</a>
-        <a class="btn ghost" href="#install">How to install</a>
-        <a class="btn ghost" href="guide.html">User guide</a>
+        <a class="btn gh" href="guide.html">Read the guide →</a>
       </div>
-      <div class="meta">GoldBot.exe · version 1.4 · 24.8 MB · Windows 10/11 (64-bit)</div>
+      <div class="meta">GoldBot.exe · v1.4 · 24.8 MB · Windows 10/11 · free · demo-only by default</div>
     </div>
-    <div class="mock" aria-hidden="true">
-      <div class="bar"><i></i><i></i><i></i></div>
-      <div class="tiles">
-        <div class="tile"><span>Account</span><b>$10,000</b></div>
-        <div class="tile"><span>Gold</span><b>3588.66</b></div>
-        <div class="tile"><span>Trend</span><b class="pos">▲ Up</b></div>
-        <div class="tile"><span>Losses</span><b class="neg">−$12.40</b></div>
-        <div class="tile"><span>Profit</span><b class="pos">+$31.20</b></div>
-        <div class="tile"><span>Open</span><b>5</b></div>
+
+    <div class="stage" id="stage" aria-hidden="true">
+      <div class="glow"></div>
+      <div class="scene" id="scene">
+        <div class="dash glass">
+          <div class="top"><i></i><i></i><i></i><span>GOLD BOT DASHBOARD</span><em>● Trading</em></div>
+          <div class="tiles">
+            <div class="tile"><span>Account</span><b>$10,000</b></div>
+            <div class="tile"><span>Gold</span><b>3588.66</b></div>
+            <div class="tile"><span>Trend</span><b class="pos">▲ Up</b></div>
+            <div class="tile"><span>Losses</span><b class="neg">−$12.40</b></div>
+            <div class="tile"><span>Profit</span><b class="pos">+$31.20</b></div>
+            <div class="tile"><span>Open</span><b>5</b></div>
+          </div>
+          <div class="chart mc">
+            <div class="mchead"><span>MONTE CARLO · 70 RESAMPLED PATHS</span><span class="au">GOLD M1</span></div>
+            <svg id="mc" viewBox="0 0 600 210" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <filter id="zap" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <filter id="greenglow" x="-10%" y="-30%" width="120%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
+              </defs>
+              <g id="mcPaths"></g>
+              <g id="mcBands"></g>
+              <line x1="370" y1="22" x2="370" y2="200" class="divider"/>
+              <text x="200" y="16" class="lab">IN-SAMPLE</text><text x="470" y="16" class="lab">OUT-OF-SAMPLE</text>
+              <path id="trendpath" class="mainglow" d=""/><path id="mainline" class="main" d=""/>
+              <text id="p95" x="586" y="0" class="pct">95%</text><text id="p50" x="586" y="0" class="pct">50%</text><text id="p05" x="586" y="0" class="pct">5%</text>
+              <circle class="spark" r="4.5" filter="url(#zap)"><animateMotion dur="4.5s" repeatCount="indefinite"><mpath href="#trendpath"/></animateMotion></circle>
+            </svg>
+          </div>
+        </div>
+        <div class="float bot glass"><div class="botface"><i></i><i></i></div><div><b>IN A BUY TRADE</b><small>+$4.20 · target 3591.10</small></div></div>
+        <div class="float win glass"><div class="coin">Au</div><div><b style="color:var(--au)">TARGET HIT</b><small>BUY closed · +$1.24</small></div></div>
       </div>
-      <svg class="spark" viewBox="0 0 300 70" preserveAspectRatio="none"><polyline fill="none" stroke="#22d3ee" stroke-width="2" points="0,50 20,46 40,52 60,38 80,42 100,30 120,34 140,22 160,28 180,18 200,26 220,16 240,22 260,12 280,18 300,10"/></svg>
-      <small>Illustration only, not real results</small>
+      <div class="tag-illus">Illustration, not real results</div>
     </div>
   </header>
 
+  <div class="stats">
+    <div class="stat glass rv"><b>30s</b><span>decision on every 1-minute candle</span></div>
+    <div class="stat glass rv"><b>$100+</b><span>ready-made setups for any account size</span></div>
+    <div class="stat glass rv"><b>Broker</b><span>side stops: protected even if your PC is off</span></div>
+    <div class="stat glass rv"><b>Phone</b><span>app for iPhone &amp; Android, PIN-protected</span></div>
+  </div>
+
+  <section id="how">
+    <div class="eyebrow">How it works</div>
+    <h2>Up and running in three steps</h2>
+    <p class="sub">No coding and no Python. Just MetaTrader 5 and one app.</p>
+    <div class="flow">
+      <div class="step glass rv"><div class="num">1</div><h3>Install</h3><p>Open MT5 on a demo account, turn on Algo Trading, and run <code>GoldBot.exe</code>.</p></div>
+      <div class="step glass rv"><div class="num">2</div><h3>Pick a setup</h3><p>Choose your account size ($100, $200, $300 …). The settings are scaled for you, and every value stays editable.</p></div>
+      <div class="step glass rv"><div class="num">3</div><h3>Watch it trade</h3><p>Press Start. Follow every decision live on the dashboard or on your phone.</p></div>
+    </div>
+  </section>
+
   <section id="features">
-    <h2>What it does</h2>
-    <p class="sub">Everything runs on your own computer. Nothing is sent to us.</p>
+    <div class="eyebrow">Features</div>
+    <h2>Everything in one dashboard</h2>
+    <p class="sub">Runs entirely on your own computer. Nothing is sent to us.</p>
     <div class="cards">
-      <div class="card"><h3>M1 candle entries</h3><p>Decides at a set second of each 1-minute candle using candle colour, M1/M5 trends and a wick filter.</p></div>
-      <div class="card"><h3>Basket trading</h3><p>Opens a batch of trades together, each with its own target at the broker, and an optional recovery and counter-batch mode.</p></div>
-      <div class="card"><h3>Broker-side protection</h3><p>Stops and targets are stored at your broker, so trades stay protected even if the app or your PC is closed.</p></div>
-      <div class="card"><h3>Daily loss limit</h3><p>Counts losses only. When reached it closes everything and stops trading until the next day.</p></div>
-      <div class="card"><h3>Live dashboard</h3><p>Results, open and closed trades with entry and exit times, an activity log with history, and all settings in one page.</p></div>
-      <div class="card"><h3>Phone app</h3><p>Open your dashboard on iPhone or Android through your own private Tailscale network, protected by a PIN, and add it to your home screen.</p></div>
-      <div class="card"><h3>Trade history</h3><p>Every closed trade with entry and exit times and prices, grouped by day for the last 30 days.</p></div>
-      <div class="card"><h3>Fits any account</h3><p>Ready-made setups for $100, $200, $300 and up, with a live preview. Use one as a starting point, then change anything you like. Demo-only by default.</p></div>
+      <div class="card glass rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></div><h3>M1 candle entries</h3><p>Decides at a set second of each candle using candle colour, M1/M5 trends and a wick filter.</p></div>
+      <div class="card glass rv"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div><h3>Basket trading</h3><p>Batches of trades with their own broker targets, plus optional recovery and counter batches.</p></div>
+      <div class="card glass rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></div><h3>Broker-side protection</h3><p>Stops and targets live at your broker, so trades stay protected if the app closes.</p></div>
+      <div class="card glass rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 8v5l3 2"/><circle cx="12" cy="12" r="9"/></svg></div><h3>Daily loss limit</h3><p>Counts losses only. When reached, it closes everything and stops until tomorrow.</p></div>
+      <div class="card glass rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div><h3>Live dashboard</h3><p>Results, open and closed trades with times, an activity log, history and every setting in one page.</p></div>
+      <div class="card glass rv"><div class="ic"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div><h3>Phone app</h3><p>Open your dashboard on iPhone or Android through your own private Tailscale network, PIN-protected.</p></div>
+      <div class="card glass rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><h3>Fits any account</h3><p>Ready-made setups from $100 with a live preview. Use one as a start, then tweak anything.</p></div>
+      <div class="card glass rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg></div><h3>Demo-first safety</h3><p>Trades demo accounts by default, warns when settings risk too much, and only one copy can run.</p></div>
     </div>
   </section>
 
   <section id="install">
-    <h2>Install in 4 steps</h2>
-    <p class="sub">You need a MetaTrader 5 terminal from your broker. A demo account is strongly recommended. Full details, every setting and small-account tips are in the <a href="guide.html">User guide</a>.</p>
-    <div class="steps">
-      <div class="step"><div><h3>Install MetaTrader 5 and log in</h3><p>Download MT5 from your broker, log in to a <b>demo</b> account and add the gold symbol (XAUUSD / GOLD) to Market Watch.</p></div></div>
-      <div class="step"><div><h3>Turn on Algo Trading</h3><p>In MT5 click the <b>Algo Trading</b> button in the toolbar so it turns green. Keep MT5 open while the bot runs.</p></div></div>
-      <div class="step"><div><h3>Download and run GoldBot.exe</h3><p>Save <code>GoldBot.exe</code> anywhere (e.g. your Desktop) and double-click it. If Windows SmartScreen appears, click <b>More info → Run anyway</b> (the app is not code-signed). Keep its window open.</p></div></div>
-      <div class="step"><div><h3>Open the dashboard and press Start</h3><p>Your browser opens <code>http://127.0.0.1:8790</code>. Check the settings, then press <b>Start trading</b>. Trading is always off after the app starts.</p></div></div>
+    <div class="eyebrow">Install</div>
+    <h2>Four steps, about five minutes</h2>
+    <p class="sub">You need MetaTrader 5 from your broker. Start with a demo account. Full details in the <a href="guide.html">User guide</a>.</p>
+    <div class="install">
+      <div class="ins glass rv"><span class="n">1</span><h3>MetaTrader 5</h3><p>Install MT5 from your broker, log in to a <b>demo</b> account and add gold to Market Watch.</p></div>
+      <div class="ins glass rv"><span class="n">2</span><h3>Algo Trading on</h3><p>Click <b>Algo Trading</b> in MT5's toolbar so it turns green. Keep MT5 open.</p></div>
+      <div class="ins glass rv"><span class="n">3</span><h3>Run GoldBot.exe</h3><p>Double-click it. At "Windows protected your PC", choose <b>More info → Run anyway</b>.</p></div>
+      <div class="ins glass rv"><span class="n">4</span><h3>Pick &amp; press Start</h3><p>The dashboard opens at <code>127.0.0.1:8790</code>. Choose a setup and press <b>Start trading</b>.</p></div>
     </div>
   </section>
 
   <section id="risk">
-    <div class="warn">
+    <div class="risk rv">
       <h2>Please read: risk warning</h2>
       <ul>
         <li><b>This is experimental software.</b> In our own 90-day tests on real gold ticks, the strategy <b>lost money overall</b>. Short winning streaks are common and misleading.</li>
         <li>Recovery and basket modes can turn a small loss into a very large one within minutes.</li>
         <li>Use a <b>demo account</b>. Never trade money you cannot afford to lose.</li>
-        <li>This is not financial advice, and there is no guarantee of profit. You are responsible for every trade it places on your account.</li>
+        <li>Not financial advice. No guarantee of profit. You are responsible for every trade it places.</li>
       </ul>
     </div>
   </section>
 
   <section id="faq">
-    <h2>FAQ</h2>
-    <details><summary>Windows says "Windows protected your PC". Is it safe?</summary><p>The app isn't code-signed, so SmartScreen warns about any new download. Check the file's fingerprint below matches before running it, then choose More info → Run anyway.</p></details>
-    <details><summary>Where are my settings stored?</summary><p>In <code>%LOCALAPPDATA%\GoldBot</code> (config, activity history and trade log). Delete that folder to reset everything.</p></details>
-    <details><summary>Can I trade a live account?</summary><p>Not by default: the bot refuses live accounts. You can unlock it yourself at your own risk; the steps and warnings are in the <a href="guide.html#live">User guide, section 8</a>. Please test on demo first.</p></details>
-    <details><summary>Does closing the app close my trades?</summary><p>No. Open trades stay in MetaTrader 5 with their stops and targets at the broker. Restarting the app never closes trades.</p></details>
-    <details><summary>How do I uninstall?</summary><p>Delete <code>GoldBot.exe</code> and the <code>%LOCALAPPDATA%\GoldBot</code> folder. Nothing else is installed.</p></details>
-    <details><summary>File fingerprint (SHA-256)</summary><p class="hash"><code>20148D21506CA4C7B578411F8DDB0D2F39EDFA161B6417F7D8C078365AE069BC</code><br>Check it in PowerShell with <code>Get-FileHash GoldBot.exe</code>.</p></details>
+    <div class="eyebrow">FAQ</div>
+    <h2>Questions</h2>
+    <details class="glass"><summary>Windows says "Windows protected your PC". Is it safe?</summary><p>The app isn't code-signed, so SmartScreen warns about any new download. Check the fingerprint below matches, then choose More info → Run anyway.</p></details>
+    <details class="glass"><summary>Can I use it with $100?</summary><p>Yes. Pick the $100 setup in Settings (the minimum). It uses one 0.01-lot trade at a time with a stop and daily limit scaled to the account. Try it on a $100 demo account first.</p></details>
+    <details class="glass"><summary>Can I trade a live account?</summary><p>Not by default: the bot refuses live accounts. You can unlock it yourself at your own risk; the steps and warnings are in the <a href="guide.html#live">User guide, section 8</a>.</p></details>
+    <details class="glass"><summary>Does closing the app close my trades?</summary><p>No. Open trades stay in MetaTrader 5 with their stops and targets at the broker. Restarting never closes trades.</p></details>
+    <details class="glass"><summary>How do I uninstall?</summary><p>Delete <code>GoldBot.exe</code> and the <code>%LOCALAPPDATA%\GoldBot</code> folder. Nothing else is installed.</p></details>
+    <details class="glass"><summary>File fingerprint (SHA-256)</summary><p class="hash"><code>20148D21506CA4C7B578411F8DDB0D2F39EDFA161B6417F7D8C078365AE069BC</code><br>Check it in PowerShell with <code>Get-FileHash GoldBot.exe</code>.</p></details>
   </section>
-
-  <footer>Gold Bot is an independent tool and is not affiliated with MetaQuotes or any broker. MetaTrader is a trademark of its owner. Trading leveraged products carries a high risk of loss. Not financial advice.</footer>
 </div>
+
+<footer><div class="wrap in">
+  <img src="sparkgrid.png" alt="sparkgrid-dev logo">
+  <div><b>Gold Bot</b> · built by <a href="https://github.com/sparkgrid-dev">sparkgrid-dev</a><br>
+  An independent tool, not affiliated with MetaQuotes or any broker. MetaTrader is a trademark of its owner. Trading leveraged products carries a high risk of loss. Not financial advice.</div>
+</div></footer>
+
+<script>
+(() => {
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // faint binary drift
+  const cv = document.getElementById("bits"), cx = cv.getContext("2d"); let cols = [], fs = 16, last = 0;
+  const size = () => { cv.width = innerWidth; cv.height = innerHeight; cols = Array(Math.ceil(cv.width / fs)).fill(0).map(() => Math.random() * -60); };
+  size(); addEventListener("resize", size);
+  const rain = t => { if (t - last > 90) { last = t; cx.fillStyle = "rgba(4,6,12,.2)"; cx.fillRect(0, 0, cv.width, cv.height);
+      cx.font = fs + "px JetBrains Mono, Consolas, monospace";
+      cols.forEach((y, i) => { cx.fillStyle = Math.random() < .07 ? "#f2c14e" : "#22d3ee"; cx.fillText(Math.random() < .5 ? "0" : "1", i * fs, y * fs);
+        cols[i] = y * fs > cv.height && Math.random() > .975 ? 0 : y + 1; }); }
+    requestAnimationFrame(rain); };
+  if (!still) requestAnimationFrame(rain);
+  // isometric stage follows the mouse a little
+  const iso = document.getElementById("scene"), stage = document.getElementById("stage");
+  if (!still && iso) addEventListener("mousemove", e => {
+    const r = stage.getBoundingClientRect(), x = (e.clientX - (r.left + r.width / 2)) / innerWidth, y = (e.clientY - (r.top + r.height / 2)) / innerHeight;
+    iso.style.transform = `rotateY(${-14 + x * 10}deg) rotateX(${6 - y * 6}deg)`;
+  });
+  // Monte Carlo fan chart (illustration): 70 jagged random-walk equity paths + percentile bands
+  (function () {
+    const svg = document.getElementById("mc"); if (!svg) return;
+    const NS = "http://www.w3.org/2000/svg", W = 600, X0 = 14, X1 = 572, Y0 = 190, STEPS = 110, N = 70;
+    let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const gauss = () => { let u = 0, v = 0; while (!u) u = rnd(); while (!v) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+    const xs = Array.from({length: STEPS + 1}, (_, i) => X0 + (X1 - X0) * i / STEPS);
+    const paths = [];
+    for (let k = 0; k < N; k++) {
+      let y = Y0, drift = -1.05 + (rnd() - .5) * .5, ys = [y];
+      for (let i = 1; i <= STEPS; i++) { y += drift + gauss() * 5.2; ys.push(Math.max(22, Math.min(205, y))); }
+      paths.push(ys);
+    }
+    const d = ys => ys.map((y, i) => (i ? "L" : "M") + xs[i].toFixed(1) + "," + y.toFixed(1)).join("");
+    const g = document.getElementById("mcPaths");
+    paths.forEach((ys, k) => { const p = document.createElementNS(NS, "path"); p.setAttribute("d", d(ys)); p.setAttribute("class", "p" + (k % 9 === 0 ? " hi" : "")); g.appendChild(p); });
+    // percentiles per step (lower y = higher equity)
+    const pct = q => xs.map((_, i) => { const col = paths.map(p => p[i]).sort((a, b) => a - b); return col[Math.round((col.length - 1) * q)]; });
+    const bands = {p95: pct(.05), p50: pct(.5), p05: pct(.95)};
+    const gb = document.getElementById("mcBands");
+    Object.entries(bands).forEach(([k, ys]) => {
+      const smooth = ys.map((y, i) => { let s = 0, n = 0; for (let j = Math.max(0, i - 4); j <= Math.min(ys.length - 1, i + 4); j++) { s += ys[j]; n++; } return s / n; });
+      const p = document.createElementNS(NS, "path"); p.setAttribute("d", d(smooth)); p.setAttribute("class", "band" + (k === "p50" ? " mid" : "")); gb.appendChild(p);
+      const lab = document.getElementById(k); lab.setAttribute("y", (smooth[smooth.length - 1] + 3).toFixed(1));
+    });
+    // the bright "actual" path: hugs the median with extra jaggedness, like a lightning strike
+    let main = [], y = Y0; seed = 99;
+    for (let i = 0; i <= STEPS; i++) { const target = bands.p50[i]; y += (target - y) * .35 + gauss() * 6.5; main.push(i ? Math.max(22, Math.min(205, y)) : Y0); }
+    const md = d(main);
+    ["trendpath", "mainline"].forEach(id => { const el = document.getElementById(id); el.setAttribute("d", md); });
+    // draw-in animation
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      // live loop (frame by frame): paths draw across the chart, pause, redraw; lightning strikes on the white line
+      const all = [...g.children], ml = document.getElementById("mainline"), mg = document.getElementById("trendpath");
+      const lens = all.map(p => p.getTotalLength()), mlen = ml.getTotalLength();
+      const bolts = document.createElementNS(NS, "g"); bolts.setAttribute("filter", "url(#zap)"); svg.appendChild(bolts);
+      const peaks = main.map((y, i) => ({x: xs[i], y, i})).filter(p => p.i > 4 && p.i < STEPS - 2 && p.y < main[p.i - 1] && p.y < main[p.i + 1]);
+      const strike = () => {
+        const p = peaks[Math.floor(Math.random() * peaks.length)]; if (!p) return;
+        let x = p.x, y = p.y, pts = [`${x},${y}`];
+        for (let s = 0; s < 4; s++) { x += (Math.random() - .5) * 18; y -= 9 + Math.random() * 9; pts.push(`${x.toFixed(1)},${Math.max(4, y).toFixed(1)}`); }
+        const pl = document.createElementNS(NS, "polyline");
+        pl.setAttribute("points", pts.join(" ")); pl.setAttribute("fill", "none"); pl.setAttribute("stroke", "#fff3c4");
+        pl.setAttribute("stroke-width", "2"); pl.setAttribute("stroke-linejoin", "round");
+        const dot = document.createElementNS(NS, "circle"); dot.setAttribute("cx", p.x); dot.setAttribute("cy", p.y); dot.setAttribute("r", "4.5"); dot.setAttribute("fill", "#fff7d6");
+        bolts.replaceChildren(pl, dot);
+        [[0, 1], [70, .2], [140, 1], [320, 0]].forEach(([ms, o]) => setTimeout(() => { bolts.style.opacity = o; }, ms));
+      };
+      let start = performance.now(), nextStrike = 1200;
+      const CYCLE = 9000, DRAW = 2600;
+      const frame = now => {
+        const tm = (now - start) % CYCLE, k = Math.min(1, tm / DRAW), ease = 1 - Math.pow(1 - k, 3);
+        all.forEach((p, i) => { const d = Math.min(1, Math.max(0, ease * 1.15 - (i % 20) * .008)); p.style.strokeDasharray = lens[i]; p.style.strokeDashoffset = lens[i] * (1 - d); });
+        const mk = Math.min(1, Math.max(0, (tm - 300) / DRAW)), me = 1 - Math.pow(1 - mk, 3);
+        [ml, mg].forEach(el => { el.style.strokeDasharray = mlen; el.style.strokeDashoffset = mlen * (1 - me); });
+        if (tm > DRAW && now - start > nextStrike) { strike(); nextStrike = now - start + 900 + Math.random() * 1400; }
+      };
+      setInterval(() => frame(performance.now()), 33);    // ~30 fps; timers keep running where animation frames may not
+    }
+  })();
+  // reveal on scroll
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), {threshold: .12});
+  document.querySelectorAll(".rv").forEach(el => io.observe(el));
+  setTimeout(() => document.querySelectorAll(".rv").forEach(el => el.classList.add("in")), 2500);   // never leave content hidden
+})();
+</script>
 </body>
 </html>
