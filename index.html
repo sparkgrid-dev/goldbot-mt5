@@ -69,6 +69,9 @@ h1{font:800 clamp(36px,5.2vw,64px)/1.04 var(--disp);letter-spacing:.005em;margin
 .btn.dl:hover{box-shadow:0 14px 44px rgba(212,160,23,.55)}
 .btn.gh{color:var(--ink);border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05)}
 .btn.gh:hover{background:rgba(255,255,255,.09)}
+.btn.tip{color:#ffd9e2;border:1px solid rgba(251,113,133,.45);background:rgba(251,113,133,.08)}
+.btn.tip:hover{background:rgba(251,113,133,.16);box-shadow:0 0 22px rgba(251,113,133,.25)}
+.tipline{margin-top:6px}.tipline a{color:#ffb3c4}
 .meta{font:12.5px var(--mono);color:var(--muted);margin-top:14px}
 
 /* floating dashboard: a real-looking panel at a gentle 3D angle, with two small cards in front */
@@ -198,6 +201,7 @@ footer b{color:#cdd6e4}
       <div class="cta">
         <a class="btn dl" href="https://github.com/sparkgrid-dev/goldbot-mt5/releases/latest/download/GoldBot.exe">⬇ Download v1.9 for Windows</a>
         <a class="btn gh" href="guide.html">Read the guide →</a>
+        <a class="btn tip" href="https://paypal.me/MaribethAguirre22" target="_blank" rel="noopener">♥ Tip the developer</a>
       </div>
       <div class="meta">GoldBot.exe · v1.9 · 24.9 MB · Windows 10/11 · free · demo-only by default</div>
     </div>
@@ -300,19 +304,20 @@ footer b{color:#cdd6e4}
   <section id="faq">
     <div class="eyebrow">FAQ</div>
     <h2>Questions</h2>
+    <details class="glass"><summary>Is it free?</summary><p>Yes. Gold Bot is free to download and use. If it helps you and you'd like to support further work, you can leave an optional tip through <a href="https://paypal.me/MaribethAguirre22" target="_blank" rel="noopener">PayPal</a>. A tip is a thank-you, not a purchase: it doesn't unlock anything or change how the bot trades.</p></details>
     <details class="glass"><summary>Windows says "Windows protected your PC". Is it safe?</summary><p>The app isn't code-signed, so SmartScreen warns about any new download. Check the fingerprint below matches, then choose More info → Run anyway.</p></details>
-    <details class="glass"><summary>Can I use it with $100?</summary><p>Yes. Pick the $100 setup in Settings (the minimum). It uses one 0.01-lot trade at a time with a stop and daily limit scaled to the account. Try it on a $100 demo account first.</p></details>
+    <details class="glass"><summary>Can I use it with $100?</summary><p>Yes. Pick the $100 setup in Settings (the minimum) and check its numbers in the preview before applying it. Try it on a $100 demo account first.</p></details>
     <details class="glass"><summary>Can I trade a live account?</summary><p>Not by default: the bot refuses live accounts. You can unlock it yourself at your own risk; the steps and warnings are in the <a href="guide.html#live">User guide, section 8</a>.</p></details>
     <details class="glass"><summary>Does closing the app close my trades?</summary><p>No. Open trades stay in MetaTrader 5 with their stops and targets at the broker. Restarting never closes trades.</p></details>
     <details class="glass"><summary>How do I uninstall?</summary><p>Delete <code>GoldBot.exe</code> and the <code>%LOCALAPPDATA%\GoldBot</code> folder. Nothing else is installed.</p></details>
-    <details class="glass"><summary>File fingerprint (SHA-256)</summary><p class="hash"><code>147E741788AE4A8EAEB5A71346766B6D5BAFFFFC1243ED76D3B4110B201E48B5</code><br>Check it in PowerShell with <code>Get-FileHash GoldBot.exe</code>.</p></details>
+    <details class="glass"><summary>File fingerprint (SHA-256)</summary><p class="hash"><code>9A5AD9A040629297482D22D01BCFB0BCEACBD5A331618FC899AF7677D4015C86</code><br>Check it in PowerShell with <code>Get-FileHash GoldBot.exe</code>.</p></details>
   </section>
 </div>
 
 <footer><div class="wrap in">
   <img src="sparkgrid.png" alt="sparkgrid-dev logo">
   <div><b>Gold Bot</b> · built by <a href="https://github.com/sparkgrid-dev">sparkgrid-dev</a><br>
-  An independent tool, not affiliated with MetaQuotes or any broker. MetaTrader is a trademark of its owner. Trading leveraged products carries a high risk of loss. Not financial advice.</div>
+  An independent tool, not affiliated with MetaQuotes or any broker. MetaTrader is a trademark of its owner. Trading leveraged products carries a high risk of loss. Not financial advice.<div class="tipline">Free to use. Like it? <a href="https://paypal.me/MaribethAguirre22" target="_blank" rel="noopener">♥ Leave an optional tip</a></div></div>
 </div></footer>
 
 <script>
