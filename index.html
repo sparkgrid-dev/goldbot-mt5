@@ -63,7 +63,7 @@ h1{font-family:Orbitron,var(--ui);font-weight:800;font-size:clamp(34px,5vw,54px)
 section{padding:46px 0}
 h2{font-family:Orbitron,var(--ui);font-size:24px;letter-spacing:.03em;margin:0 0 8px}
 .sub{color:var(--muted);margin:0 0 24px}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 .card{position:relative;border-radius:16px;padding:20px;background:var(--panel);border:1px solid var(--line)}
 .card::before{content:"";position:absolute;top:8px;left:8px;width:12px;height:12px;border-top:2px solid var(--cy);border-left:2px solid var(--cy);border-radius:3px 0 0 0;opacity:.6}
 .card h3{margin:0 0 6px;font-size:16px}
@@ -81,6 +81,7 @@ summary{cursor:pointer;font-weight:600}
 details p{color:#aab4c6;margin:10px 0 0;font-size:14.5px}
 .hash{word-break:break-all}
 footer{padding:30px 0 50px;color:#6b7488;font-size:13px;border-top:1px solid var(--line);margin-top:20px}
+@media (max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:860px){.hero{grid-template-columns:1fr}.mock{transform:none}.cards{grid-template-columns:1fr}nav a{display:none}}
 @media (prefers-reduced-motion:reduce){.floor::before,.mock{animation:none}}
 </style>
@@ -102,7 +103,7 @@ footer{padding:30px 0 50px;color:#6b7488;font-size:13px;border-top:1px solid var
         <a class="btn dl" href="https://github.com/sparkgrid-dev/goldbot-mt5/releases/latest/download/GoldBot.exe">⬇ Download for Windows</a>
         <a class="btn ghost" href="#install">How to install</a>
       </div>
-      <div class="meta">GoldBot.exe · version 1.0 · 24.8 MB · Windows 10/11 (64-bit)</div>
+      <div class="meta">GoldBot.exe · version 1.1 · 24.8 MB · Windows 10/11 (64-bit)</div>
     </div>
     <div class="mock" aria-hidden="true">
       <div class="bar"><i></i><i></i><i></i></div>
@@ -128,6 +129,8 @@ footer{padding:30px 0 50px;color:#6b7488;font-size:13px;border-top:1px solid var
       <div class="card"><h3>Broker-side protection</h3><p>Stops and targets are stored at your broker, so trades stay protected even if the app or your PC is closed.</p></div>
       <div class="card"><h3>Daily loss limit</h3><p>Counts losses only. When reached it closes everything and stops trading until the next day.</p></div>
       <div class="card"><h3>Live dashboard</h3><p>Results, open and closed trades with entry and exit times, an activity log with history, and all settings in one page.</p></div>
+      <div class="card"><h3>Phone app</h3><p>Open your dashboard on iPhone or Android through your own private Tailscale network, protected by a PIN, and add it to your home screen.</p></div>
+      <div class="card"><h3>Trade history</h3><p>Every closed trade with entry and exit times and prices, grouped by day for the last 30 days.</p></div>
       <div class="card"><h3>Demo-first</h3><p>Trades demo accounts only out of the box. Live trading stays locked unless you deliberately unlock it.</p></div>
     </div>
   </section>
@@ -162,7 +165,7 @@ footer{padding:30px 0 50px;color:#6b7488;font-size:13px;border-top:1px solid var
     <details><summary>Can I trade a live account?</summary><p>Not by default: the bot refuses live accounts. Unlocking it means editing <code>allow_live</code> in the config file yourself. Please test on demo first.</p></details>
     <details><summary>Does closing the app close my trades?</summary><p>No. Open trades stay in MetaTrader 5 with their stops and targets at the broker. Restarting the app never closes trades.</p></details>
     <details><summary>How do I uninstall?</summary><p>Delete <code>GoldBot.exe</code> and the <code>%LOCALAPPDATA%\GoldBot</code> folder. Nothing else is installed.</p></details>
-    <details><summary>File fingerprint (SHA-256)</summary><p class="hash"><code>DBFDB8AE560FDEA619D0D425BFD53EDB0A79A83EB84DF5FA50BF88507B4BB9BB</code><br>Check it in PowerShell with <code>Get-FileHash GoldBot.exe</code>.</p></details>
+    <details><summary>File fingerprint (SHA-256)</summary><p class="hash"><code>BCA86DDB6C2558D7EF057A49B74DF4998BA689237C2DFAAB6B9AC7399436D5B0</code><br>Check it in PowerShell with <code>Get-FileHash GoldBot.exe</code>.</p></details>
   </section>
 
   <footer>Gold Bot is an independent tool and is not affiliated with MetaQuotes or any broker. MetaTrader is a trademark of its owner. Trading leveraged products carries a high risk of loss. Not financial advice.</footer>
