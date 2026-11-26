@@ -108,7 +108,7 @@ footer b{color:#cdd6e4}
 </aside>
 
 <main>
-<div class="hero glass"><div class="eyebrow">Gold Bot · Documentation</div><h1>User Guide</h1><p class="lead">Everything you need to install Gold Bot, understand every setting, and run it safely. For version 1.9.</p></div>
+<div class="hero glass"><div class="eyebrow">Gold Bot · Documentation</div><h1>User Guide</h1><p class="lead">Everything you need to install Gold Bot, understand every setting, and run it safely. For version 2.0.</p></div>
 
 <div class="box warn"><b class="t">Read this first</b>Gold Bot is experimental. In our own 90-day tests on real gold ticks the strategy <b>lost money overall</b>. Use a <b>demo account</b>. Nothing here is financial advice.</div>
 
@@ -214,6 +214,16 @@ footer b{color:#cdd6e4}
 <table>
   <tr><td>ON / OFF switch</td><td>Turns both pauses on or off instantly (saves right away). Your minutes stay in the boxes and are used again when you switch back on. Presets never turn pauses back on.</td></tr>
   <tr><td>Break after wins in a row / Break length</td><td>After this many winning batches in a row, take a break of this many minutes (0 = off; a loss resets the count).</td></tr>
+</table>
+<h3>Profit lock (per day)</h3>
+<div class="box tip"><b class="t">Keeps part of a good day</b>Off by default. It protects profit you have already made; it doesn't make the strategy itself profitable.</div>
+<table>
+  <tr><td>ON / OFF switch</td><td>Turns the profit lock on or off instantly (saves right away). Your percentages are kept when it's off.</td></tr>
+  <tr><td>Lock when up (% of balance)</td><td>When today's profit reaches this share of the day's starting balance, profit is locked. Default 30%: on a $100 day, at +$30.</td></tr>
+  <tr><td>Amount to lock (% of balance)</td><td>How much of the balance is locked each time. Default 20%: on a $100 day the account can't fall below $120 for the rest of the day, and the other $10 is left to trade with. Every further +30% locks another 20%. Must be smaller than the trigger.</td></tr>
+  <tr><td>What happens to open trades</td><td>Locking doesn't close anything. The broker stops move up so a loss can't go past the locked level, even if the PC is off.</td></tr>
+  <tr><td>Falling back to the lock</td><td>If equity (balance + floating profit/loss) drops to the locked level, the bot closes all trades and stops for the day. A yellow banner shows <b>Continue trading today</b>: it asks first, because continuing uses your normal stop and the locked profit can be lost. The next day starts fresh.</td></tr>
+  <tr><td>Deposits</td><td>The day's starting balance follows deposits and demo top-ups until the first lock of the day.</td></tr>
 </table>
 
 <h3>Phone access</h3>
