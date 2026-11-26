@@ -3,6 +3,6 @@
 Website for Gold Bot, an automated M1 gold (XAUUSD) scalper with a live dashboard for MetaTrader 5 on Windows.
 
 - Website: https://sparkgrid-dev.github.io/goldbot-mt5/
-- Download: see [Releases](https://github.com/sparkgrid-dev/goldbot-mt5/releases/latest)
+- Get the app: [Gold Bot on Gumroad](https://sparkgriddev.gumroad.com/l/goldbot) (one-time payment)
 
 **Risk warning:** experimental software. In our own 90-day tests on real gold ticks the strategy lost money overall. It trades demo accounts only by default. Not financial advice.
