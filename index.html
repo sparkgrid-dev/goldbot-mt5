@@ -82,11 +82,12 @@ h1{font:800 clamp(36px,5.2vw,64px)/1.04 var(--disp);letter-spacing:.005em;margin
 .countdown div{text-align:center;padding:6px 2px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(34,211,238,.25)}
 .countdown b{display:block;font:700 19px/1.1 var(--mono);color:#c9f4ff}
 .countdown small{font:500 9.5px var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
-.offer .cta{margin:0}
+.offer .cta{margin:0;display:grid;grid-template-columns:minmax(0,1fr) 226px;gap:12px;align-items:stretch}
+.offer .cta .btn{justify-content:center;padding-left:14px;padding-right:14px;min-width:0}
 .offer-soon{font:600 13px var(--mono);color:#c9f4ff;margin:10px 0 0}
 .offer-fine{font:500 11px var(--mono);color:var(--muted);margin:12px 0 0;letter-spacing:.02em}
 .offer.ended .countdown,.offer.ended .price-was,.offer.ended .price-save{display:none}
-@media (max-width:640px){.offer-main{align-items:flex-start}.offer-timer{align-items:flex-start}.price-now{font-size:36px}}
+@media (max-width:640px){.offer .cta{grid-template-columns:1fr}.offer-main{align-items:flex-start}.offer-timer{align-items:flex-start}.price-now{font-size:36px}}
 .btn.tip{color:#ffd9e2;border:1px solid rgba(251,113,133,.45);background:rgba(251,113,133,.08)}
 .btn.tip:hover{background:rgba(251,113,133,.16);box-shadow:0 0 22px rgba(251,113,133,.25)}
 .tipline{margin-top:6px}.tipline a{color:#ffb3c4}
