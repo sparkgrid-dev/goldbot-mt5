@@ -317,5 +317,34 @@ At 0.01 lots, a $10 move in gold is about <b>$10 per trade</b>. Gold often moves
 </div>
 <footer><div class="in"><img src="sparkgrid.png" alt="sparkgrid-dev logo"><div><b>Gold Bot</b> · built by <a href="https://github.com/sparkgrid-dev">sparkgrid-dev</a> · <a href="./">Back to home</a><br>An independent tool, not affiliated with MetaQuotes, Tailscale or any broker. Trading leveraged products carries a high risk of loss. Not financial advice.</div></div></footer>
 <script>(()=>{if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;const c=document.getElementById("bits"),x=c.getContext("2d");let cols=[],fs=16,l=0;const s=()=>{c.width=innerWidth;c.height=innerHeight;cols=Array(Math.ceil(c.width/fs)).fill(0).map(()=>Math.random()*-60)};s();addEventListener("resize",s);const r=t=>{if(t-l>90){l=t;x.fillStyle="rgba(4,6,12,.2)";x.fillRect(0,0,c.width,c.height);x.font=fs+"px JetBrains Mono, Consolas, monospace";cols.forEach((y,i)=>{x.fillStyle=Math.random()<.07?"#f2c14e":"#22d3ee";x.fillText(Math.random()<.5?"0":"1",i*fs,y*fs);cols[i]=y*fs>c.height&&Math.random()>.975?0:y+1})}requestAnimationFrame(r)};requestAnimationFrame(r)})();</script>
+<!-- back to top -->
+<style>
+.totop{position:fixed;right:20px;bottom:20px;z-index:60;width:48px;height:48px;border-radius:14px;border:1px solid rgba(242,193,78,.45);
+  background:rgba(12,16,26,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#f2c14e;font:700 20px/1 system-ui,sans-serif;
+  display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 26px rgba(0,0,0,.45),0 0 18px rgba(242,193,78,.18);
+  opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .25s,transform .25s,background .2s}
+.totop.show{opacity:1;transform:none;pointer-events:auto}
+.totop:hover{background:rgba(242,193,78,.16)}
+.totop:focus-visible{outline:2px solid #22d3ee;outline-offset:3px}
+html{scrollbar-color:rgba(242,193,78,.6) rgba(255,255,255,.05)}
+::-webkit-scrollbar{width:16px;height:16px}
+::-webkit-scrollbar-thumb{background:rgba(242,193,78,.55);border-radius:10px;border:3px solid transparent;background-clip:padding-box;min-height:48px}
+::-webkit-scrollbar-thumb:hover{background:rgba(242,193,78,.85);background-clip:padding-box}
+::-webkit-scrollbar-track{background:rgba(255,255,255,.05)}
+@media (max-width:600px){.totop{right:14px;bottom:14px;width:44px;height:44px}}
+</style>
+<button class="totop" id="toTop" type="button" aria-label="Back to top" title="Back to top">&#8593;</button>
+<script>
+(function () {
+  var b = document.getElementById("toTop");
+  var check = function () { b.classList.toggle("show", window.scrollY > 500); };
+  window.addEventListener("scroll", check, {passive: true}); check(); setInterval(check, 400);
+  b.addEventListener("click", function () {
+    window.scrollTo({top: 0, behavior: "smooth"});
+    setTimeout(function () { if (window.scrollY > 0) { window.scrollTo({top: 0, behavior: "instant"}); } }, 900);
+    if (history.replaceState) history.replaceState(null, "", location.pathname + location.search);
+  });
+})();
+</script>
 </body>
 </html>
